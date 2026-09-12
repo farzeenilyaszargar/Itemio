@@ -7,16 +7,16 @@ export default function Home() {
     <main className="min-h-screen bg-stone-50 text-stone-950">
       <section className="mx-auto flex min-h-screen w-full max-w-md flex-col px-5 py-5">
         <nav className="flex items-center justify-between">
-          <div className="flex h-11 items-center gap-2">
+          <div className="flex h-11 items-center gap-2.5">
             <Image
               src="/kitne-rupay-logo.png"
               alt=""
               width={40}
               height={40}
-              className="h-8 w-8 object-contain"
+              className="h-9 w-9 object-contain"
               priority
             />
-            <div className="leading-none text-lg font-black tracking-tight">Kitne Rupay</div>
+            <div className="font-krona text-[18px] leading-none tracking-normal">Kitne Rupay</div>
           </div>
         </nav>
 

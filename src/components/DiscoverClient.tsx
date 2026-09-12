@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
-import Link from "next/link";
 import { Camera, Loader2, Search, Upload } from "lucide-react";
 import { CompactListing, ListingCard } from "@/components/ListingCard";
 import { groupListings, type ProductListing } from "@/lib/search";
@@ -86,12 +85,6 @@ export function DiscoverClient() {
   return (
     <main className="min-h-screen bg-stone-50 text-stone-950">
       <section className="mx-auto flex w-full max-w-md flex-col gap-6 px-4 py-5">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="text-lg font-black tracking-tight">
-            Kitne Rupay
-          </Link>
-        </div>
-
         <div className="grid grid-cols-2 gap-1 rounded-[8px] border border-stone-200 bg-white p-1 shadow-sm">
           <button
             type="button"
