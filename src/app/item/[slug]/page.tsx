@@ -35,8 +35,8 @@ export default async function ItemPage({ searchParams }: ItemPageProps) {
   const heroImage = listings.find((listing) => listing.image)?.image;
 
   return (
-    <main className="min-h-screen bg-stone-50 text-stone-950">
-      <section className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-5 md:px-8 lg:px-10">
+    <main className="min-h-dvh bg-stone-50 text-stone-950">
+      <section className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col gap-5 px-4 py-4 md:gap-6 md:px-8 md:py-5 lg:px-10">
         <header className="hidden items-center justify-between md:flex">
           <Link href="/" className="flex h-11 items-center gap-1.5">
             <Image

@@ -26,6 +26,7 @@ export function DiscoverClient() {
   const [isTextLoading, setIsTextLoading] = useState(false);
 
   const productGroups = useMemo(() => groupListings(textListings), [textListings]);
+  const hasOverflowContent = photoStatus || photoListings.length > 0 || textStatus || productGroups.length > 0;
 
   async function handlePhotoUpload(file?: File) {
     if (!file) {
@@ -85,8 +86,12 @@ export function DiscoverClient() {
   }
 
   return (
-    <main className="min-h-screen bg-stone-50 text-stone-950">
-      <section className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-5 md:px-8 lg:px-10">
+    <main className="min-h-dvh bg-stone-50 text-stone-950">
+      <section
+        className={`mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-4 md:gap-6 md:px-8 md:py-5 lg:px-10 ${
+          hasOverflowContent ? "min-h-dvh" : "h-dvh overflow-hidden"
+        }`}
+      >
         <header className="hidden items-center justify-between md:flex">
           <Link href="/" className="flex h-11 items-center gap-1.5">
             <Image
@@ -138,17 +143,17 @@ export function DiscoverClient() {
           </button>
         </div>
 
-        <div className="grid gap-6">
+        <div className="grid min-h-0 flex-1 gap-4 md:gap-6">
           <div className="min-w-0">
             {activeMode === "photo" ? (
               <>
-                <section className="grid gap-6 px-1 py-2 md:grid-cols-[1fr_auto] md:items-end md:px-0 md:py-8">
-                  <div className="space-y-4">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#E0B71D]/15 text-stone-950">
-                      <Camera aria-hidden="true" size={26} />
+                <section className="grid gap-5 px-1 py-1 md:grid-cols-[1fr_auto] md:items-end md:px-0 md:py-8">
+                  <div className="space-y-3 md:space-y-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E0B71D]/15 text-stone-950 md:h-14 md:w-14">
+                      <Camera aria-hidden="true" size={24} />
                     </div>
                     <div>
-                      <h1 className="text-3xl font-black leading-9 md:max-w-xl md:text-5xl md:leading-[3.65rem]">
+                      <h1 className="text-[2rem] font-black leading-[2.45rem] md:max-w-xl md:text-5xl md:leading-[3.65rem]">
                         Snap it. Compare the <span className="text-[#E0B71D]">right</span> price.
                       </h1>
                       <p className="mt-3 text-sm leading-6 text-stone-600 md:max-w-lg md:text-base md:leading-7">
@@ -168,7 +173,7 @@ export function DiscoverClient() {
                     />
                   </label>
                 </section>
-                <p className="mt-3 px-1 text-xs leading-5 text-stone-500">Use a clear product photo under 500 KB for the best match.</p>
+                <p className="mt-2 px-1 text-xs leading-5 text-stone-500">Use a clear product photo under 500 KB for the best match.</p>
 
                 {(photoStatus || photoListings.length > 0) && (
                   <section className="mt-6 space-y-3">
@@ -184,9 +189,9 @@ export function DiscoverClient() {
               </>
             ) : (
               <>
-                <section className="space-y-5 px-1 py-2 md:px-0 md:py-8">
+                <section className="space-y-5 px-1 py-1 md:px-0 md:py-8">
                   <div>
-                    <h2 className="text-2xl font-black leading-8 md:text-5xl md:leading-[3.65rem]">Search beautiful finds across stores.</h2>
+                    <h2 className="text-[2rem] font-black leading-[2.45rem] md:text-5xl md:leading-[3.65rem]">Search beautiful finds across stores.</h2>
                   </div>
                   <form onSubmit={handleTextSearch} className="md:max-w-2xl">
                     <div className="relative flex-1">
