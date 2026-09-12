@@ -187,10 +187,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                   }`}
                 >
                   <section className="flex w-full max-w-2xl flex-col items-center gap-5 px-1 py-1 md:px-0 md:py-8">
-                    <div className="flex flex-col items-center gap-3 md:gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E0B71D]/15 text-stone-950 md:h-14 md:w-14">
-                        <Camera aria-hidden="true" size={24} />
-                      </div>
+                    <div className="flex flex-col items-center gap-2 md:gap-3">
                       <div>
                         <h1 className="text-[2rem] font-black leading-[2.45rem] md:text-5xl md:leading-[3.65rem]">
                           Check The <span className="text-[#E0B71D]">Right</span> Price.
