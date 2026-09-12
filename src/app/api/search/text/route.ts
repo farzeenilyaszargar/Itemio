@@ -1,49 +1,65 @@
 import { NextResponse } from "next/server";
-import { makeMarketplaceQuery, normalizeGoogleItem, sortListings } from "@/lib/search";
+import { makeMarketplaceQuery, normalizeSerpApiSearchItem, sortListings } from "@/lib/search";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("q")?.trim();
-  const apiKey = process.env.GOOGLE_CSE_API_KEY;
-  const cx = process.env.GOOGLE_CSE_CX;
+  const apiKey = process.env.SERPAPI_KEY;
 
   if (!query) {
     return NextResponse.json({ error: "Missing search query." }, { status: 400 });
   }
 
-  if (!apiKey || !cx) {
+  if (!apiKey) {
     return NextResponse.json(
       {
-        error: "Google Custom Search is not configured.",
-        hint: "Set GOOGLE_CSE_API_KEY and GOOGLE_CSE_CX to search Indian marketplaces.",
+        error: "SerpApi is not configured.",
+        hint: "Set SERPAPI_KEY to search Indian marketplaces.",
       },
       { status: 503 },
     );
   }
 
-  const url = new URL("https://www.googleapis.com/customsearch/v1");
-  url.searchParams.set("key", apiKey);
-  url.searchParams.set("cx", cx);
+  const url = new URL("https://serpapi.com/search.json");
+  url.searchParams.set("engine", "google");
+  url.searchParams.set("api_key", apiKey);
   url.searchParams.set("q", makeMarketplaceQuery(query));
-  url.searchParams.set("num", "10");
-  url.searchParams.set("safe", "active");
+  url.searchParams.set("num", "20");
   url.searchParams.set("gl", "in");
   url.searchParams.set("hl", "en");
+  url.searchParams.set("google_domain", "google.co.in");
 
-  const response = await fetch(url, { cache: "no-store" });
-  const data = await response.json();
+  let response: Response;
+  let data: { error?: string; shopping_results?: Record<string, unknown>[]; organic_results?: Record<string, unknown>[] };
 
-  if (!response.ok) {
+  try {
+    response = await fetch(url, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(15000),
+    });
+    data = await response.json();
+  } catch {
     return NextResponse.json(
-      { error: data.error?.message ?? "Google Custom Search request failed." },
-      { status: response.status },
+      { error: "Marketplace search timed out. Please try again." },
+      { status: 504 },
     );
   }
 
-  const listings = ((data.items ?? []) as Record<string, unknown>[])
-    .map((item, index) => normalizeGoogleItem(item, index))
+  if (!response.ok || data.error) {
+    return NextResponse.json(
+      { error: data.error ?? "SerpApi marketplace search failed." },
+      { status: response.ok ? 502 : response.status },
+    );
+  }
+
+  const rawResults = [
+    ...((data.shopping_results ?? []) as Record<string, unknown>[]),
+    ...((data.organic_results ?? []) as Record<string, unknown>[]),
+  ];
+
+  const listings = rawResults
+    .map((item, index) => normalizeSerpApiSearchItem(item, index))
     .filter((item) => item !== undefined);
 
   return NextResponse.json({ query, listings: sortListings(listings) });
 }
-

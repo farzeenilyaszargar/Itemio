@@ -1,4 +1,4 @@
-import { marketplaceDomains, marketplaceFromUrl } from "@/lib/marketplaces";
+import { marketplaces, marketplaceFromUrl } from "@/lib/marketplaces";
 
 export type ProductListing = {
   id: string;
@@ -58,8 +58,8 @@ export function slugify(value: string) {
 }
 
 export function makeMarketplaceQuery(query: string) {
-  const sites = marketplaceDomains.map((domain) => `site:${domain}`).join(" OR ");
-  return `${query} (${sites})`;
+  const stores = marketplaces.map((marketplace) => marketplace.name).join(" ");
+  return `${query} buy online India ${stores}`;
 }
 
 export function sortListings(listings: ProductListing[]) {
@@ -99,7 +99,7 @@ export function groupListings(listings: ProductListing[]): ProductGroup[] {
   });
 }
 
-export function normalizeGoogleItem(item: UnknownRecord, index: number): ProductListing | undefined {
+export function normalizeSerpApiSearchItem(item: UnknownRecord, index: number): ProductListing | undefined {
   const link = typeof item.link === "string" ? item.link : "";
   const marketplace = marketplaceFromUrl(link);
 
@@ -107,25 +107,25 @@ export function normalizeGoogleItem(item: UnknownRecord, index: number): Product
     return undefined;
   }
 
-  const pagemap = (item.pagemap ?? {}) as UnknownRecord;
-  const metatags = Array.isArray(pagemap.metatags) ? (pagemap.metatags[0] as UnknownRecord | undefined) : undefined;
-  const cseImage = Array.isArray(pagemap.cse_image) ? (pagemap.cse_image[0] as UnknownRecord | undefined) : undefined;
   const title = typeof item.title === "string" ? normalizeTitle(item.title) : "Marketplace listing";
   const snippet = typeof item.snippet === "string" ? item.snippet : "";
-  const priceInfo = extractPrice(`${title} ${snippet} ${JSON.stringify(metatags ?? {})}`);
+  const source = typeof item.source === "string" ? item.source : marketplace.name;
+  const priceInfo = extractPrice(item.price ?? item.extracted_price ?? `${title} ${snippet}`);
 
   return {
-    id: `${marketplace.domain}-${index}-${slugify(title)}`,
+    id: `${marketplace.domain}-serp-${index}-${slugify(title)}`,
     title,
-    store: marketplace.name,
+    store: source.includes(".") ? marketplace.name : source,
     domain: marketplace.domain,
     price: priceInfo.price,
     numericPrice: priceInfo.numericPrice,
     image:
-      (typeof cseImage?.src === "string" && cseImage.src) ||
-      (typeof metatags?.["og:image"] === "string" && metatags["og:image"]) ||
+      (typeof item.thumbnail === "string" && item.thumbnail) ||
+      (typeof item.image === "string" && item.image) ||
       undefined,
     link,
+    rating: typeof item.rating === "string" ? item.rating : undefined,
+    reviews: typeof item.reviews === "string" ? item.reviews : undefined,
     availability: snippet,
     sourceType: "text",
   };
@@ -161,4 +161,3 @@ export function normalizeLensItem(item: UnknownRecord, index: number): ProductLi
     sourceType: "photo",
   };
 }
-

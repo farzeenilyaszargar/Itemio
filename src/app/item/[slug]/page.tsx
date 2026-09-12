@@ -112,7 +112,7 @@ export default async function ItemPage({ searchParams }: ItemPageProps) {
             <h2 className="text-lg font-black md:text-2xl">Comparison table</h2>
             {listings.length === 0 ? (
               <p className="rounded-[8px] border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
-                Add Google CSE keys to load marketplace comparisons for this item.
+                Add a SerpApi key to load marketplace comparisons for this item.
               </p>
             ) : (
               <div className="overflow-hidden rounded-[8px] border border-stone-200 bg-white shadow-sm">
