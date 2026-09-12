@@ -192,7 +192,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                     <div className="flex flex-col items-center gap-2 md:gap-3">
                       <div>
                         <h1 className="text-[2rem] font-black leading-[2.45rem] md:text-5xl md:leading-[3.65rem]">
-                          Check The <span className="text-[#E0B71D]">Right</span> Price.
+                          Check The <span className="text-[#E0B71D]">Right</span> Price
                         </h1>
                         <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-stone-600 md:text-base md:leading-7">
                           Upload a product photo and we’ll look for matching listings across shopping sites.
@@ -230,7 +230,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
               <>
                 <section className="space-y-5 px-1 py-1 md:px-0 md:py-8">
                   <div>
-                    <h2 className="text-[2rem] font-black leading-[2.45rem] md:text-5xl md:leading-[3.65rem]">Search beautiful finds across stores.</h2>
+                    <h2 className="text-[2rem] font-black leading-[2.45rem] md:text-5xl md:leading-[3.65rem]">Search beautiful finds across stores</h2>
                   </div>
                   <form onSubmit={handleTextSearch} className="md:max-w-2xl">
                     <div className="relative flex-1">
