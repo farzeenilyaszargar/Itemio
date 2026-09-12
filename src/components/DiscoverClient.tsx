@@ -104,34 +104,37 @@ export function DiscoverClient() {
           </div>
         </header>
 
-        <div className="grid gap-6 md:grid-cols-[260px_1fr] lg:grid-cols-[300px_1fr]">
-          <aside className="md:sticky md:top-5 md:self-start">
-            <div className="grid grid-cols-2 gap-1 rounded-[8px] border border-stone-200 bg-white p-1 shadow-sm md:grid-cols-1 md:gap-2 md:p-2">
-              <button
-                type="button"
-                aria-pressed={activeMode === "photo"}
-                onClick={() => setActiveMode("photo")}
-                className={`flex h-11 items-center justify-center gap-2 rounded-[6px] text-sm font-black transition md:justify-start md:px-4 ${
-                  activeMode === "photo" ? "bg-stone-950 text-white" : "text-stone-600"
-                }`}
-              >
-                <Camera aria-hidden="true" size={16} />
-                Find price
-              </button>
-              <button
-                type="button"
-                aria-pressed={activeMode === "browse"}
-                onClick={() => setActiveMode("browse")}
-                className={`flex h-11 items-center justify-center gap-2 rounded-[6px] text-sm font-black transition md:justify-start md:px-4 ${
-                  activeMode === "browse" ? "bg-stone-950 text-white" : "text-stone-600"
-                }`}
-              >
-                <Search aria-hidden="true" size={16} />
-                Browse items
-              </button>
-            </div>
-          </aside>
+        <div className="relative grid grid-cols-2 rounded-full border border-stone-200 bg-white p-1 shadow-sm md:mx-auto md:w-full md:max-w-md">
+          <div
+            className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-full bg-stone-950 shadow-sm transition-transform duration-300 ease-out ${
+              activeMode === "browse" ? "translate-x-[calc(100%+8px)]" : "translate-x-0"
+            }`}
+          />
+          <button
+            type="button"
+            aria-pressed={activeMode === "photo"}
+            onClick={() => setActiveMode("photo")}
+            className={`relative z-10 flex h-11 items-center justify-center gap-2 rounded-full text-sm font-black transition-colors duration-300 ${
+              activeMode === "photo" ? "text-white" : "text-stone-600"
+            }`}
+          >
+            <Camera aria-hidden="true" size={16} />
+            Find price
+          </button>
+          <button
+            type="button"
+            aria-pressed={activeMode === "browse"}
+            onClick={() => setActiveMode("browse")}
+            className={`relative z-10 flex h-11 items-center justify-center gap-2 rounded-full text-sm font-black transition-colors duration-300 ${
+              activeMode === "browse" ? "text-white" : "text-stone-600"
+            }`}
+          >
+            <Search aria-hidden="true" size={16} />
+            Browse items
+          </button>
+        </div>
 
+        <div className="grid gap-6">
           <div className="min-w-0">
             {activeMode === "photo" ? (
               <>
