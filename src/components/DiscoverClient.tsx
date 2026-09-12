@@ -179,7 +179,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                       </div>
                       <div>
                         <h1 className="text-[2rem] font-black leading-[2.45rem] md:text-5xl md:leading-[3.65rem]">
-                          Snap it. Compare the <span className="text-[#E0B71D]">right</span> price.
+                          Compare the <span className="text-[#E0B71D]">right</span> price.
                         </h1>
                         <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-stone-600 md:text-base md:leading-7">
                           Upload a product photo and we’ll look for matching listings across shopping sites.
