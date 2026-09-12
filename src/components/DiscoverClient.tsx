@@ -218,7 +218,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                   <section className="mt-6 space-y-3">
                     <h2 className="text-lg font-black">Photo matches</h2>
                     {photoStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{photoStatus}</p>}
-                    <div className="divide-y divide-stone-200 rounded-[8px] bg-white px-4 shadow-sm ring-1 ring-stone-200 lg:grid lg:grid-cols-2 lg:divide-x lg:divide-y-0 lg:px-0">
+                    <div className="divide-y divide-stone-200 rounded-[8px] bg-white px-4 ring-1 ring-stone-200 lg:grid lg:grid-cols-2 lg:divide-x lg:divide-y-0 lg:px-0">
                       {photoListings.slice(0, 8).map((listing) => (
                         <CompactListing key={listing.id} listing={listing} />
                       ))}
@@ -278,7 +278,7 @@ function ProductDetailSheet({ group, onClose }: { group: ProductGroup; onClose: 
         onClick={onClose}
         className="absolute inset-0 bg-stone-950/60 backdrop-blur-[2px] transition-opacity"
       />
-      <section className="relative z-10 max-h-[88dvh] w-full max-w-2xl animate-[sheet-up_220ms_ease-out] overflow-y-auto rounded-t-[28px] bg-stone-50 px-4 pb-6 pt-3 shadow-2xl md:rounded-t-[32px] md:px-6 md:pb-8">
+      <section className="relative z-10 max-h-[88dvh] w-full max-w-2xl animate-[sheet-up_220ms_ease-out] overflow-y-auto rounded-t-[28px] bg-stone-50 px-4 pb-6 pt-3 md:rounded-t-[32px] md:px-6 md:pb-8">
         <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-stone-300" />
         <div className="flex items-center justify-between gap-3">
           <div>
@@ -307,7 +307,7 @@ function ProductDetailSheet({ group, onClose }: { group: ProductGroup; onClose: 
           </div>
 
           <div className="space-y-4">
-            <div className="rounded-[8px] bg-white p-4 shadow-sm ring-1 ring-stone-200">
+            <div className="rounded-[8px] bg-white p-4 ring-1 ring-stone-200">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">Cheapest found</p>
               <div className="mt-2 flex items-end justify-between gap-3">
                 <div>
@@ -331,7 +331,7 @@ function ProductDetailSheet({ group, onClose }: { group: ProductGroup; onClose: 
               </div>
             </div>
 
-            <div className="overflow-hidden rounded-[8px] bg-white shadow-sm ring-1 ring-stone-200">
+            <div className="overflow-hidden rounded-[8px] bg-white ring-1 ring-stone-200">
               {listings.map((listing) => (
                 <a
                   key={listing.id}

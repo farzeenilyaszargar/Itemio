@@ -79,7 +79,7 @@ export function ItemClient({ slug, query }: ItemClientProps) {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <section className="overflow-hidden rounded-[8px] bg-white shadow-sm ring-1 ring-stone-200">
+          <section className="overflow-hidden rounded-[8px] bg-white ring-1 ring-stone-200">
             <div className="aspect-[4/5] bg-stone-100 lg:aspect-square">
               {heroImage ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -125,7 +125,7 @@ export function ItemClient({ slug, query }: ItemClientProps) {
 
           {listings.length > 0 && (
             <section className="space-y-3">
-              <div className="overflow-hidden rounded-[8px] bg-white shadow-sm ring-1 ring-stone-200">
+              <div className="overflow-hidden rounded-[8px] bg-white ring-1 ring-stone-200">
                 {listings.slice(0, 10).map((listing) => (
                   <a
                     key={listing.id}

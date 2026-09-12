@@ -10,7 +10,7 @@ export function ListingCard({ group, onSelect }: ListingCardProps) {
   const cheapest = group.listings[0];
 
   return (
-    <article className="overflow-hidden rounded-[8px] bg-white shadow-sm ring-1 ring-stone-200">
+    <article className="overflow-hidden rounded-[8px] bg-white ring-1 ring-stone-200">
       <button type="button" onClick={() => onSelect?.(group)} className="block w-full text-left">
         <div className="aspect-[4/5] bg-stone-100">
           {group.image ? (
