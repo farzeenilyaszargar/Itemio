@@ -144,36 +144,44 @@ export function DiscoverClient() {
         </div>
 
         <div className="grid min-h-0 flex-1 gap-4 md:gap-6">
-          <div className="min-w-0">
+          <div className="flex min-h-0 flex-1 flex-col">
             {activeMode === "photo" ? (
               <>
-                <section className="grid gap-5 px-1 py-1 md:grid-cols-[1fr_auto] md:items-end md:px-0 md:py-8">
-                  <div className="space-y-3 md:space-y-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E0B71D]/15 text-stone-950 md:h-14 md:w-14">
-                      <Camera aria-hidden="true" size={24} />
+                <div
+                  className={`flex flex-col ${
+                    photoStatus || photoListings.length > 0
+                      ? ""
+                      : "min-h-0 flex-1 items-center justify-center text-center"
+                  }`}
+                >
+                  <section className="flex w-full max-w-2xl flex-col items-center gap-5 px-1 py-1 md:px-0 md:py-8">
+                    <div className="flex flex-col items-center gap-3 md:gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E0B71D]/15 text-stone-950 md:h-14 md:w-14">
+                        <Camera aria-hidden="true" size={24} />
+                      </div>
+                      <div>
+                        <h1 className="text-[2rem] font-black leading-[2.45rem] md:text-5xl md:leading-[3.65rem]">
+                          Snap it. Compare the <span className="text-[#E0B71D]">right</span> price.
+                        </h1>
+                        <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-stone-600 md:text-base md:leading-7">
+                          Upload a product photo and we’ll look for matching listings across shopping sites.
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h1 className="text-[2rem] font-black leading-[2.45rem] md:max-w-xl md:text-5xl md:leading-[3.65rem]">
-                        Snap it. Compare the <span className="text-[#E0B71D]">right</span> price.
-                      </h1>
-                      <p className="mt-3 text-sm leading-6 text-stone-600 md:max-w-lg md:text-base md:leading-7">
-                        Upload a product photo and we’ll look for matching listings across shopping sites.
-                      </p>
-                    </div>
-                  </div>
-                  <label className="flex h-14 cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-black text-white shadow-sm md:w-48">
-                    {isPhotoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
-                    {isPhotoLoading ? "Searching..." : "Choose photo"}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      capture="environment"
-                      className="sr-only"
-                      onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
-                    />
-                  </label>
-                </section>
-                <p className="mt-2 px-1 text-xs leading-5 text-stone-500">Use a clear product photo under 500 KB for the best match.</p>
+                    <label className="flex h-14 w-full max-w-[240px] cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-black text-white shadow-sm">
+                      {isPhotoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
+                      {isPhotoLoading ? "Searching..." : "Choose photo"}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        className="sr-only"
+                        onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
+                      />
+                    </label>
+                  </section>
+                  <p className="mt-2 max-w-md px-1 text-xs leading-5 text-stone-500">Use a clear product photo under 500 KB for the best match.</p>
+                </div>
 
                 {(photoStatus || photoListings.length > 0) && (
                   <section className="mt-6 space-y-3">
