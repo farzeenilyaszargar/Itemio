@@ -7,7 +7,7 @@ export default function Home() {
     <main className="min-h-screen bg-stone-50 text-stone-950">
       <section className="mx-auto flex min-h-screen w-full max-w-md flex-col px-5 py-5">
         <nav className="flex items-center justify-between">
-          <div className="flex h-11 items-center gap-2.5">
+          <div className="flex h-11 items-center gap-1.5">
             <Image
               src="/kitne-rupay-logo.png"
               alt=""
@@ -16,7 +16,7 @@ export default function Home() {
               className="h-9 w-9 object-contain"
               priority
             />
-            <div className="font-krona text-[18px] leading-none tracking-normal">Kitne Rupay</div>
+            <div className="font-krona text-[15px] leading-none tracking-normal">Kitne Rupay</div>
           </div>
         </nav>
 
