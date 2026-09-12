@@ -251,8 +251,8 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                 </section>
 
                 <section className="columns-2 gap-3 pb-8 pt-6">
-                  {productGroups.map((group, index) => (
-                    <ListingCard key={group.id} group={group} index={index} onSelect={setSelectedGroup} />
+                  {productGroups.map((group) => (
+                    <ListingCard key={group.id} group={group} onSelect={setSelectedGroup} />
                   ))}
                 </section>
               </>
