@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, User } from "lucide-react";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-stone-50 text-stone-950">
       <section className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-5 md:px-8 lg:px-10">
-        <nav className="hidden items-center justify-between md:flex">
+        <nav className="flex items-center justify-between">
           <div className="flex h-11 items-center gap-1.5">
             <Image
               src="/kitne-rupay-logo.png"
@@ -16,11 +16,15 @@ export default function Home() {
               className="h-9 w-9 object-contain"
               priority
             />
-            <div className="font-krona text-[15px] leading-none tracking-normal">Kitne Rupay</div>
+            <div className="hidden font-krona text-[15px] leading-none tracking-normal md:block">Kitne Rupay</div>
           </div>
-          <div className="flex h-11 w-11 items-center justify-center rounded-full border border-stone-200 bg-white text-sm font-black text-stone-950 shadow-sm">
-            D
-          </div>
+          <button
+            type="button"
+            aria-label="Demo profile"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-stone-950 shadow-sm ring-1 ring-stone-200"
+          >
+            <User aria-hidden="true" size={18} />
+          </button>
         </nav>
 
         <div className="grid flex-1 items-center gap-8 pb-14 pt-6 text-left md:grid-cols-[1fr_0.85fr] md:gap-14 md:pb-8 md:pt-10 lg:gap-20">

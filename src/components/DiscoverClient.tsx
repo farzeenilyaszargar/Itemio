@@ -3,7 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Camera, Loader2, Search, Upload } from "lucide-react";
+import { Camera, Loader2, Search, Upload, User } from "lucide-react";
 import { CompactListing, ListingCard } from "@/components/ListingCard";
 import { groupListings, type ProductListing } from "@/lib/search";
 
@@ -87,7 +87,7 @@ export function DiscoverClient() {
   return (
     <main className="min-h-screen bg-stone-50 text-stone-950">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-5 md:px-8 lg:px-10">
-        <header className="hidden items-center justify-between md:flex">
+        <header className="flex items-center justify-between">
           <Link href="/" className="flex h-11 items-center gap-1.5">
             <Image
               src="/kitne-rupay-logo.png"
@@ -97,11 +97,15 @@ export function DiscoverClient() {
               className="h-9 w-9 object-contain"
               priority
             />
-            <span className="font-krona text-[15px] leading-none tracking-normal">Kitne Rupay</span>
+            <span className="hidden font-krona text-[15px] leading-none tracking-normal md:inline">Kitne Rupay</span>
           </Link>
-          <div className="flex h-11 w-11 items-center justify-center rounded-full border border-stone-200 bg-white text-sm font-black text-stone-950 shadow-sm">
-            D
-          </div>
+          <button
+            type="button"
+            aria-label="Demo profile"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-stone-950 shadow-sm ring-1 ring-stone-200"
+          >
+            <User aria-hidden="true" size={18} />
+          </button>
         </header>
 
         <div className="relative grid grid-cols-2 rounded-full bg-white p-1 shadow-sm ring-1 ring-stone-200 md:mx-auto md:w-full md:max-w-md">
