@@ -21,17 +21,6 @@ export default function Home() {
         </nav>
 
         <div className="flex flex-1 flex-col items-center justify-center gap-6 pb-14 pt-6 text-center">
-          <div className="flex justify-center">
-            <Image
-              src="/hero-shopping-bags.png"
-              alt="Yellow and black shopping bags with a price tag"
-              width={512}
-              height={512}
-              className="h-auto w-full max-w-[230px] object-contain drop-shadow-xl"
-              priority
-            />
-          </div>
-
           <div className="max-w-sm">
             <h1 className="text-4xl font-black leading-[2.85rem]">
               Find out kitne rupay before you buy.
@@ -48,6 +37,17 @@ export default function Home() {
             Try it out for free
             <Search aria-hidden="true" size={18} />
           </Link>
+
+          <div className="flex justify-center pt-2">
+            <Image
+              src="/hero-shopping-bags.png"
+              alt="Yellow and black shopping bags with a price tag"
+              width={512}
+              height={512}
+              className="h-auto w-full max-w-[230px] object-contain drop-shadow-xl"
+              priority
+            />
+          </div>
         </div>
       </section>
     </main>
