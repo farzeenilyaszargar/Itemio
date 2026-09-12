@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Camera, Loader2, Search, Upload, User } from "lucide-react";
 import { CompactListing, ListingCard } from "@/components/ListingCard";
+import { readBrowseListingsCache, writeBrowseListingsCache } from "@/lib/browse-cache";
+import { demoBrowseListings } from "@/lib/demo-listings";
 import { groupListings, type ProductListing } from "@/lib/search";
 
 type SearchResponse = {
@@ -15,157 +17,14 @@ type SearchResponse = {
 
 type DiscoverMode = "photo" | "browse";
 
-const demoBrowseListings: ProductListing[] = [
-  {
-    id: "demo-amazon-linen-trouser",
-    title: "Ivory Linen Wide Leg Trouser",
-    store: "Amazon.in",
-    domain: "amazon.in",
-    price: "₹1,299",
-    numericPrice: 1299,
-    image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=800&q=80",
-    link: "https://www.amazon.in/",
-    availability: "Soft linen blend, relaxed fit",
-    sourceType: "text",
-  },
-  {
-    id: "demo-myntra-linen-trouser",
-    title: "Ivory Linen Wide Leg Trouser",
-    store: "Myntra",
-    domain: "myntra.com",
-    price: "₹1,449",
-    numericPrice: 1449,
-    image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=800&q=80",
-    link: "https://www.myntra.com/",
-    availability: "Sizes XS to XL",
-    sourceType: "text",
-  },
-  {
-    id: "demo-ajio-crossbody",
-    title: "Black Mini Crossbody Bag",
-    store: "AJIO",
-    domain: "ajio.com",
-    price: "₹899",
-    numericPrice: 899,
-    image: "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?auto=format&fit=crop&w=800&q=80",
-    link: "https://www.ajio.com/",
-    availability: "Compact daily carry",
-    sourceType: "text",
-  },
-  {
-    id: "demo-flipkart-crossbody",
-    title: "Black Mini Crossbody Bag",
-    store: "Flipkart",
-    domain: "flipkart.com",
-    price: "₹1,049",
-    numericPrice: 1049,
-    image: "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?auto=format&fit=crop&w=800&q=80",
-    link: "https://www.flipkart.com/",
-    availability: "Faux leather finish",
-    sourceType: "text",
-  },
-  {
-    id: "demo-nykaa-lip-tint",
-    title: "Berry Glaze Lip Tint",
-    store: "Nykaa",
-    domain: "nykaa.com",
-    price: "₹549",
-    numericPrice: 549,
-    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80",
-    link: "https://www.nykaa.com/",
-    availability: "Glossy tint, 6 ml",
-    sourceType: "text",
-  },
-  {
-    id: "demo-meesho-lip-tint",
-    title: "Berry Glaze Lip Tint",
-    store: "Meesho",
-    domain: "meesho.com",
-    price: "₹399",
-    numericPrice: 399,
-    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800&q=80",
-    link: "https://www.meesho.com/",
-    availability: "Budget pick",
-    sourceType: "text",
-  },
-  {
-    id: "demo-tatacliq-watch",
-    title: "Gold Mesh Strap Watch",
-    store: "Tata CLiQ",
-    domain: "tatacliq.com",
-    price: "₹2,199",
-    numericPrice: 2199,
-    image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=800&q=80",
-    link: "https://www.tatacliq.com/",
-    availability: "Minimal dial",
-    sourceType: "text",
-  },
-  {
-    id: "demo-amazon-watch",
-    title: "Gold Mesh Strap Watch",
-    store: "Amazon.in",
-    domain: "amazon.in",
-    price: "₹1,999",
-    numericPrice: 1999,
-    image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=800&q=80",
-    link: "https://www.amazon.in/",
-    availability: "Prime eligible",
-    sourceType: "text",
-  },
-  {
-    id: "demo-jiomart-headphones",
-    title: "Cream Wireless Headphones",
-    store: "JioMart",
-    domain: "jiomart.com",
-    price: "₹1,799",
-    numericPrice: 1799,
-    image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80",
-    link: "https://www.jiomart.com/",
-    availability: "40 hour battery",
-    sourceType: "text",
-  },
-  {
-    id: "demo-flipkart-headphones",
-    title: "Cream Wireless Headphones",
-    store: "Flipkart",
-    domain: "flipkart.com",
-    price: "₹1,649",
-    numericPrice: 1649,
-    image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80",
-    link: "https://www.flipkart.com/",
-    availability: "Noise isolation",
-    sourceType: "text",
-  },
-  {
-    id: "demo-myntra-sneakers",
-    title: "White Everyday Sneakers",
-    store: "Myntra",
-    domain: "myntra.com",
-    price: "₹1,899",
-    numericPrice: 1899,
-    image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80",
-    link: "https://www.myntra.com/",
-    availability: "Sizes 4 to 9",
-    sourceType: "text",
-  },
-  {
-    id: "demo-snapdeal-sneakers",
-    title: "White Everyday Sneakers",
-    store: "Snapdeal",
-    domain: "snapdeal.com",
-    price: "₹1,599",
-    numericPrice: 1599,
-    image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80",
-    link: "https://www.snapdeal.com/",
-    availability: "Low-top lace up",
-    sourceType: "text",
-  },
-];
+type DiscoverClientProps = {
+  initialMode?: DiscoverMode;
+};
 
-export function DiscoverClient() {
-  const [activeMode, setActiveMode] = useState<DiscoverMode>("photo");
+export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
+  const [activeMode, setActiveMode] = useState<DiscoverMode>(initialMode);
   const [photoListings, setPhotoListings] = useState<ProductListing[]>([]);
-  const [textListings, setTextListings] = useState<ProductListing[]>([]);
+  const [textListings, setTextListings] = useState<ProductListing[]>(() => readBrowseListingsCache());
   const [query, setQuery] = useState("");
   const [photoStatus, setPhotoStatus] = useState("");
   const [textStatus, setTextStatus] = useState("");
@@ -174,6 +33,16 @@ export function DiscoverClient() {
 
   const productGroups = useMemo(() => groupListings(textListings.length ? textListings : demoBrowseListings), [textListings]);
   const hasOverflowContent = photoStatus || photoListings.length > 0 || textStatus || productGroups.length > 0;
+
+  function setMode(mode: DiscoverMode) {
+    setActiveMode(mode);
+
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("mode", mode);
+      window.history.replaceState(null, "", url);
+    }
+  }
 
   async function handlePhotoUpload(file?: File) {
     if (!file) {
@@ -223,7 +92,9 @@ export function DiscoverClient() {
         setTextStatus(data.hint ?? data.error ?? "Search could not run right now.");
         return;
       }
-      setTextListings(data.listings ?? []);
+      const nextListings = data.listings ?? [];
+      setTextListings(nextListings);
+      writeBrowseListingsCache(nextListings);
       setTextStatus(data.listings?.length ? "" : "No marketplace listings found. Try a more specific item name.");
     } catch {
       setTextStatus("Search failed. Please try again on a stable connection.");
@@ -269,7 +140,7 @@ export function DiscoverClient() {
           <button
             type="button"
             aria-pressed={activeMode === "photo"}
-            onClick={() => setActiveMode("photo")}
+            onClick={() => setMode("photo")}
             className={`relative z-10 flex h-11 items-center justify-center gap-2 rounded-full text-sm font-black transition-colors duration-300 ${
               activeMode === "photo" ? "text-white" : "text-stone-600"
             }`}
@@ -280,7 +151,7 @@ export function DiscoverClient() {
           <button
             type="button"
             aria-pressed={activeMode === "browse"}
-            onClick={() => setActiveMode("browse")}
+            onClick={() => setMode("browse")}
             className={`relative z-10 flex h-11 items-center justify-center gap-2 rounded-full text-sm font-black transition-colors duration-300 ${
               activeMode === "browse" ? "text-white" : "text-stone-600"
             }`}

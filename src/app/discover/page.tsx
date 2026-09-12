@@ -1,6 +1,12 @@
 import { DiscoverClient } from "@/components/DiscoverClient";
 
-export default function DiscoverPage() {
-  return <DiscoverClient />;
-}
+type DiscoverPageProps = {
+  searchParams: Promise<{ mode?: string }>;
+};
 
+export default async function DiscoverPage({ searchParams }: DiscoverPageProps) {
+  const params = await searchParams;
+  const initialMode = params.mode === "browse" ? "browse" : "photo";
+
+  return <DiscoverClient initialMode={initialMode} />;
+}
