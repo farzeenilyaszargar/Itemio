@@ -282,8 +282,7 @@ function ProductDetailSheet({ group, onClose }: { group: ProductGroup; onClose: 
         <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-stone-300" />
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-400">Best match</p>
-            <h2 className="mt-1 text-2xl font-black leading-8 text-stone-950 md:text-3xl md:leading-10">{group.title}</h2>
+            <h2 className="text-2xl font-black leading-8 text-stone-950 md:text-3xl md:leading-10">{group.title}</h2>
           </div>
           <button
             type="button"
