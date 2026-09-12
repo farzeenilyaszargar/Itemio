@@ -188,9 +188,13 @@ export function DiscoverClient() {
                   <div>
                     <h2 className="text-2xl font-black leading-8 md:text-5xl md:leading-[3.65rem]">Search beautiful finds across stores.</h2>
                   </div>
-                  <form onSubmit={handleTextSearch} className="flex gap-2 md:max-w-2xl">
+                  <form onSubmit={handleTextSearch} className="md:max-w-2xl">
                     <div className="relative flex-1">
-                      <Search aria-hidden="true" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                      {isTextLoading ? (
+                        <Loader2 aria-hidden="true" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 animate-spin text-stone-400" />
+                      ) : (
+                        <Search aria-hidden="true" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                      )}
                       <input
                         value={query}
                         onChange={(event) => setQuery(event.target.value)}
@@ -198,14 +202,6 @@ export function DiscoverClient() {
                         className="h-12 w-full rounded-full bg-stone-100 pl-10 pr-3 text-sm outline-none ring-stone-950 transition focus:bg-white focus:ring-2"
                       />
                     </div>
-                    <button
-                      type="submit"
-                      className="flex h-12 w-12 items-center justify-center rounded-full bg-stone-950 text-white disabled:opacity-60 md:w-14"
-                      disabled={isTextLoading}
-                      aria-label="Search"
-                    >
-                      {isTextLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
-                    </button>
                   </form>
                   {textStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{textStatus}</p>}
                 </section>
