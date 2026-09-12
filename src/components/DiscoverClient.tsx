@@ -186,8 +186,7 @@ export function DiscoverClient() {
               <>
                 <section className="space-y-5 rounded-[8px] border border-stone-200 bg-white p-4 shadow-sm md:p-8">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#E0B71D]">Browse to buy</p>
-                    <h2 className="mt-2 text-2xl font-black leading-8 md:text-5xl md:leading-[3.65rem]">Search beautiful finds across stores.</h2>
+                    <h2 className="text-2xl font-black leading-8 md:text-5xl md:leading-[3.65rem]">Search beautiful finds across stores.</h2>
                   </div>
                   <form onSubmit={handleTextSearch} className="flex gap-2 md:max-w-2xl">
                     <div className="relative flex-1">
