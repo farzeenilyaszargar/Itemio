@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Camera, ExternalLink, IndianRupee, Loader2, Search, Upload, User, X } from "lucide-react";
 import { CompactListing, ListingCard } from "@/components/ListingCard";
+import { MobileOnlyNotice } from "@/components/MobileOnlyNotice";
 import { readBrowseListingsCache, writeBrowseListingsCache } from "@/lib/browse-cache";
 import { demoBrowseListings } from "@/lib/demo-listings";
 import { groupListings, sortListings, type ProductGroup, type ProductListing } from "@/lib/search";
@@ -119,8 +120,9 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
 
   return (
     <main className="min-h-dvh bg-stone-50 text-stone-950">
+      <MobileOnlyNotice />
       <section
-        className={`mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-4 md:gap-6 md:px-8 md:py-5 lg:px-10 ${
+        className={`mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-4 md:hidden ${
           hasOverflowContent ? "min-h-dvh" : "h-dvh overflow-hidden"
         }`}
       >

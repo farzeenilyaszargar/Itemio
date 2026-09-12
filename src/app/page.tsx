@@ -1,11 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, User } from "lucide-react";
+import { MobileOnlyNotice } from "@/components/MobileOnlyNotice";
 
 export default function Home() {
   return (
     <main className="min-h-dvh bg-stone-50 text-stone-950">
-      <section className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-5 py-5 md:px-8 lg:px-10">
+      <MobileOnlyNotice />
+      <section className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-5 py-5 md:hidden">
         <nav className="hidden items-center justify-between md:flex">
           <div className="flex h-11 items-center gap-1.5">
             <Image

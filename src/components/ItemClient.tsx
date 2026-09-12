@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ExternalLink, IndianRupee, ShoppingBag, User } from "lucide-react";
+import { MobileOnlyNotice } from "@/components/MobileOnlyNotice";
 import { findCachedProductGroup, readBrowseListingsCache } from "@/lib/browse-cache";
 import { demoBrowseListings } from "@/lib/demo-listings";
 import { sortListings, type ProductGroup } from "@/lib/search";
@@ -44,7 +45,8 @@ export function ItemClient({ slug, query }: ItemClientProps) {
 
   return (
     <main className="min-h-dvh bg-stone-50 text-stone-950">
-      <section className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col gap-5 px-4 py-4 md:gap-6 md:px-8 md:py-5 lg:px-10">
+      <MobileOnlyNotice />
+      <section className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col gap-5 px-4 py-4 md:hidden">
         <header className="hidden items-center justify-between md:flex">
           <Link href="/" className="flex h-11 items-center gap-1.5">
             <Image
