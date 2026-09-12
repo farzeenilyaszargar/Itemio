@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
@@ -20,7 +20,7 @@ export default function Home() {
           </div>
         </nav>
 
-        <div className="flex flex-1 flex-col items-center justify-center gap-6 pb-14 pt-6 text-center">
+        <div className="flex flex-1 flex-col items-start justify-center gap-6 pb-14 pt-6 text-left">
           <div className="max-w-sm">
             <h1 className="text-4xl font-black leading-[2.85rem]">
               Know the right price before you buy.
@@ -35,10 +35,10 @@ export default function Home() {
             className="mt-1 flex h-14 w-full max-w-xs items-center justify-center gap-2 rounded-[8px] bg-stone-950 px-5 text-base font-black text-white shadow-sm"
           >
             Try it out for free
-            <Search aria-hidden="true" size={18} />
+            <ArrowRight aria-hidden="true" size={18} />
           </Link>
 
-          <div className="flex justify-center pt-2">
+          <div className="flex w-full justify-center pt-2">
             <Image
               src="/hero-shopping-bags.png"
               alt="Yellow and black shopping bags with a price tag"
