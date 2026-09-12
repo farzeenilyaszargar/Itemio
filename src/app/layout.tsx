@@ -15,6 +15,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Kitne Rupay",
   description: "Photo-first Indian marketplace price comparison.",
+  icons: {
+    icon: "/kitne-rupay-logo.png",
+    apple: "/kitne-rupay-logo.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
