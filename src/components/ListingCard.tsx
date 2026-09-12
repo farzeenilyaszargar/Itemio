@@ -29,7 +29,7 @@ export function ListingCard({ group, onSelect }: ListingCardProps) {
           </div>
           <div className="flex items-center justify-between">
             <span className="inline-flex items-center gap-1 text-sm font-bold text-emerald-700">
-              <IndianRupee aria-hidden="true" size={14} />
+              {cheapest?.price && <IndianRupee aria-hidden="true" size={14} />}
               {cheapest?.price?.replace("₹", "") ?? "Check price"}
             </span>
             <span className="text-xs font-medium text-stone-500">{cheapest?.store}</span>

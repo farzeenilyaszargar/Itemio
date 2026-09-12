@@ -102,8 +102,8 @@ export function ItemClient({ slug, query }: ItemClientProps) {
                 <div className="mt-2 flex items-end justify-between gap-3">
                   <div>
                     <p className="flex items-center text-3xl font-black text-stone-950">
-                      <IndianRupee aria-hidden="true" size={24} />
-                      {cheapest?.price?.replace("₹", "") ?? "Check"}
+                      {cheapest?.price && <IndianRupee aria-hidden="true" size={24} />}
+                      {cheapest?.price?.replace("₹", "") ?? "Check price"}
                     </p>
                     <p className="mt-1 text-sm font-semibold text-stone-700">{cheapest?.store ?? "No listing yet"}</p>
                   </div>

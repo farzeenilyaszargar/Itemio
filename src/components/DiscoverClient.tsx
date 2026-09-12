@@ -310,11 +310,11 @@ function ProductDetailSheet({ group, onClose }: { group: ProductGroup; onClose: 
             <div className="rounded-[8px] bg-white p-4 ring-1 ring-stone-200">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">Cheapest found</p>
               <div className="mt-2 flex items-end justify-between gap-3">
-                <div>
-                  <p className="flex items-center text-3xl font-black text-stone-950">
-                    <IndianRupee aria-hidden="true" size={24} />
-                    {cheapest?.price?.replace("₹", "") ?? "Check"}
-                  </p>
+                  <div>
+                    <p className="flex items-center text-3xl font-black text-stone-950">
+                      {cheapest?.price && <IndianRupee aria-hidden="true" size={24} />}
+                      {cheapest?.price?.replace("₹", "") ?? "Check price"}
+                    </p>
                   <p className="mt-1 text-sm font-semibold text-stone-600">{cheapest?.store ?? "Open listing"}</p>
                 </div>
                 {cheapest && (
