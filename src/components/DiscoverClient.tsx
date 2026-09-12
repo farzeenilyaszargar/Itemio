@@ -250,9 +250,9 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                   {textStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{textStatus}</p>}
                 </section>
 
-                <section className="grid grid-cols-2 gap-3 pb-8 pt-6 md:grid-cols-3 lg:grid-cols-4">
-                  {productGroups.map((group) => (
-                    <ListingCard key={group.id} group={group} onSelect={setSelectedGroup} />
+                <section className="columns-2 gap-3 pb-8 pt-6">
+                  {productGroups.map((group, index) => (
+                    <ListingCard key={group.id} group={group} index={index} onSelect={setSelectedGroup} />
                   ))}
                 </section>
               </>
