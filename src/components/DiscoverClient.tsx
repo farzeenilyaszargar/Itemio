@@ -12,7 +12,10 @@ type SearchResponse = {
   hint?: string;
 };
 
+type DiscoverMode = "photo" | "browse";
+
 export function DiscoverClient() {
+  const [activeMode, setActiveMode] = useState<DiscoverMode>("photo");
   const [photoListings, setPhotoListings] = useState<ProductListing[]>([]);
   const [textListings, setTextListings] = useState<ProductListing[]>([]);
   const [query, setQuery] = useState("");
@@ -92,70 +95,101 @@ export function DiscoverClient() {
           </span>
         </div>
 
-        <section className="rounded-[8px] bg-teal-950 p-5 text-white shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-200">Photo search</p>
-          <h1 className="mt-3 text-3xl font-black leading-9">Take a photo. Find the real market price.</h1>
-          <p className="mt-3 text-sm leading-6 text-teal-50">
-            Upload a product image and Kitne Rupay checks Indian shopping sites for matching listings.
-          </p>
-          <label className="mt-5 flex h-14 cursor-pointer items-center justify-center gap-2 rounded-[8px] bg-amber-300 px-4 text-sm font-black text-stone-950 shadow-sm">
-            {isPhotoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Camera aria-hidden="true" size={18} />}
-            {isPhotoLoading ? "Searching..." : "Take photo or upload"}
-            <input
-              type="file"
-              accept="image/*"
-              capture="environment"
-              className="sr-only"
-              onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
-            />
-          </label>
-          <p className="mt-3 text-xs text-teal-100">Images up to 500 KB work best with the current Google Lens upload API.</p>
-        </section>
+        <div className="grid grid-cols-2 gap-1 rounded-[8px] border border-stone-200 bg-white p-1 shadow-sm">
+          <button
+            type="button"
+            aria-pressed={activeMode === "photo"}
+            onClick={() => setActiveMode("photo")}
+            className={`flex h-11 items-center justify-center gap-2 rounded-[6px] text-sm font-black transition ${
+              activeMode === "photo" ? "bg-stone-950 text-white" : "text-stone-600"
+            }`}
+          >
+            <Camera aria-hidden="true" size={16} />
+            Find price
+          </button>
+          <button
+            type="button"
+            aria-pressed={activeMode === "browse"}
+            onClick={() => setActiveMode("browse")}
+            className={`flex h-11 items-center justify-center gap-2 rounded-[6px] text-sm font-black transition ${
+              activeMode === "browse" ? "bg-stone-950 text-white" : "text-stone-600"
+            }`}
+          >
+            <Search aria-hidden="true" size={16} />
+            Browse items
+          </button>
+        </div>
 
-        {(photoStatus || photoListings.length > 0) && (
-          <section className="space-y-3">
-            <h2 className="text-lg font-black">Photo matches</h2>
-            {photoStatus && <p className="rounded-[8px] border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{photoStatus}</p>}
-            <div className="space-y-3">
-              {photoListings.slice(0, 8).map((listing) => (
-                <CompactListing key={listing.id} listing={listing} />
+        {activeMode === "photo" ? (
+          <>
+            <section className="rounded-[8px] bg-teal-950 p-5 text-white shadow-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-200">Photo search</p>
+              <h1 className="mt-3 text-3xl font-black leading-9">Take a photo. Find the real market price.</h1>
+              <p className="mt-3 text-sm leading-6 text-teal-50">
+                Upload a product image and Kitne Rupay checks Indian shopping sites for matching listings.
+              </p>
+              <label className="mt-5 flex h-14 cursor-pointer items-center justify-center gap-2 rounded-[8px] bg-amber-300 px-4 text-sm font-black text-stone-950 shadow-sm">
+                {isPhotoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Camera aria-hidden="true" size={18} />}
+                {isPhotoLoading ? "Searching..." : "Take photo or upload"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="sr-only"
+                  onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
+                />
+              </label>
+              <p className="mt-3 text-xs text-teal-100">Images up to 500 KB work best with the current Google Lens upload API.</p>
+            </section>
+
+            {(photoStatus || photoListings.length > 0) && (
+              <section className="space-y-3">
+                <h2 className="text-lg font-black">Photo matches</h2>
+                {photoStatus && <p className="rounded-[8px] border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{photoStatus}</p>}
+                <div className="space-y-3">
+                  {photoListings.slice(0, 8).map((listing) => (
+                    <CompactListing key={listing.id} listing={listing} />
+                  ))}
+                </div>
+              </section>
+            )}
+          </>
+        ) : (
+          <>
+            <section className="space-y-4 rounded-[8px] border border-stone-200 bg-white p-4 shadow-sm">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Browse to buy</p>
+                <h2 className="mt-2 text-2xl font-black leading-8">Search beautiful finds across stores.</h2>
+              </div>
+              <form onSubmit={handleTextSearch} className="flex gap-2">
+                <div className="relative flex-1">
+                  <Search aria-hidden="true" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
+                  <input
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    placeholder="Search trousers, lipstick, headphones..."
+                    className="h-12 w-full rounded-[8px] border border-stone-300 bg-stone-50 pl-10 pr-3 text-sm outline-none ring-teal-700 focus:ring-2"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="flex h-12 w-12 items-center justify-center rounded-[8px] bg-stone-950 text-white disabled:opacity-60"
+                  disabled={isTextLoading}
+                  aria-label="Search"
+                >
+                  {isTextLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
+                </button>
+              </form>
+              {textStatus && <p className="rounded-[8px] border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{textStatus}</p>}
+            </section>
+
+            <section className="grid grid-cols-2 gap-3 pb-8">
+              {productGroups.map((group) => (
+                <ListingCard key={group.id} group={group} />
               ))}
-            </div>
-          </section>
+            </section>
+          </>
         )}
-
-        <section className="space-y-4 rounded-[8px] border border-stone-200 bg-white p-4 shadow-sm">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Browse to buy</p>
-            <h2 className="mt-2 text-2xl font-black leading-8">Search beautiful finds across stores.</h2>
-          </div>
-          <form onSubmit={handleTextSearch} className="flex gap-2">
-            <div className="relative flex-1">
-              <Search aria-hidden="true" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
-              <input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search trousers, lipstick, headphones..."
-                className="h-12 w-full rounded-[8px] border border-stone-300 bg-stone-50 pl-10 pr-3 text-sm outline-none ring-teal-700 focus:ring-2"
-              />
-            </div>
-            <button
-              type="submit"
-              className="flex h-12 w-12 items-center justify-center rounded-[8px] bg-stone-950 text-white disabled:opacity-60"
-              disabled={isTextLoading}
-              aria-label="Search"
-            >
-              {isTextLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
-            </button>
-          </form>
-          {textStatus && <p className="rounded-[8px] border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{textStatus}</p>}
-        </section>
-
-        <section className="grid grid-cols-2 gap-3 pb-8">
-          {productGroups.map((group) => (
-            <ListingCard key={group.id} group={group} />
-          ))}
-        </section>
       </section>
     </main>
   );
