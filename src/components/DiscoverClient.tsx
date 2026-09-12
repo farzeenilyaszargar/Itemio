@@ -90,9 +90,6 @@ export function DiscoverClient() {
           <Link href="/" className="text-lg font-black tracking-tight">
             Kitne Rupay
           </Link>
-          <span className="rounded-full border border-stone-200 bg-white px-3 py-1 text-xs font-semibold text-stone-600">
-            India prices
-          </span>
         </div>
 
         <div className="grid grid-cols-2 gap-1 rounded-[8px] border border-stone-200 bg-white p-1 shadow-sm">
