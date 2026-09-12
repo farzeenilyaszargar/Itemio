@@ -7,10 +7,12 @@ type ListingCardProps = {
 };
 
 export function ListingCard({ group, onSelect }: ListingCardProps) {
+  const cheapest = group.listings[0];
+
   return (
     <article className="mb-3 inline-block w-full break-inside-avoid overflow-hidden rounded-[8px] bg-white ring-1 ring-stone-200">
       <button type="button" onClick={() => onSelect?.(group)} className="block w-full text-left">
-        <div className="bg-stone-100">
+        <div className="relative bg-stone-100">
           {group.image ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={group.image} alt="" className="block h-auto w-full" />
@@ -19,6 +21,10 @@ export function ListingCard({ group, onSelect }: ListingCardProps) {
               <Store aria-hidden="true" size={36} />
             </div>
           )}
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-950/85 via-stone-950/45 to-transparent px-2.5 pb-2.5 pt-8">
+            <h3 className="line-clamp-2 text-xs font-semibold leading-4 text-white">{group.title}</h3>
+            <p className="mt-1 text-xs font-black leading-4 text-emerald-300">{cheapest?.price ?? "Check price"}</p>
+          </div>
         </div>
       </button>
     </article>
