@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kitne Rupay
 
-## Getting Started
+Mobile-first web MVP for India-focused product price discovery. Users can upload a product photo or search by text, then compare listings across Indian marketplaces.
 
-First, run the development server:
+## Features
+
+- Hero page with a free-trial CTA.
+- `/discover` flow with photo upload and browse search.
+- SerpApi Google Lens-backed photo search.
+- Google Custom Search-backed marketplace search.
+- Product detail comparison page at `/item/[slug]`.
+- Marketplace targeting for Amazon.in, Flipkart, Meesho, Myntra, AJIO, Nykaa, JioMart, Tata CLiQ, and Snapdeal.
+
+## Setup
 
 ```bash
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+SERPAPI_KEY=
+GOOGLE_CSE_API_KEY=
+GOOGLE_CSE_CX=
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-## Learn More
+`SERPAPI_KEY` enables photo search through Google Lens. `GOOGLE_CSE_API_KEY` and `GOOGLE_CSE_CX` enable text search across the configured marketplace domains.
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+npm run build
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
