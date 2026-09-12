@@ -5,8 +5,8 @@ import { ArrowRight } from "lucide-react";
 export default function Home() {
   return (
     <main className="min-h-screen bg-stone-50 text-stone-950">
-      <section className="mx-auto flex min-h-screen w-full max-w-md flex-col px-5 py-5">
-        {/* <nav className="flex items-center justify-between">
+      <section className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-5 md:px-8 lg:px-10">
+        <nav className="hidden items-center justify-between md:flex">
           <div className="flex h-11 items-center gap-1.5">
             <Image
               src="/kitne-rupay-logo.png"
@@ -18,33 +18,36 @@ export default function Home() {
             />
             <div className="font-krona text-[15px] leading-none tracking-normal">Kitne Rupay</div>
           </div>
-        </nav> */}
+          <div className="flex h-11 w-11 items-center justify-center rounded-full border border-stone-200 bg-white text-sm font-black text-stone-950 shadow-sm">
+            D
+          </div>
+        </nav>
 
-        <div className="flex flex-1 flex-col items-start justify-center gap-6 pb-14 pt-6 text-left">
-          <div className="max-w-sm">
-            <h1 className="text-4xl font-black leading-[2.85rem]">
+        <div className="grid flex-1 items-center gap-8 pb-14 pt-6 text-left md:grid-cols-[1fr_0.85fr] md:gap-14 md:pb-8 md:pt-10 lg:gap-20">
+          <div className="flex max-w-xl flex-col items-start gap-6">
+            <h1 className="text-4xl font-black leading-[2.85rem] md:text-6xl md:leading-[4.35rem]">
               Know the <span className="text-[#E0B71D]">right</span> price before you buy.
             </h1>
-            <p className="mt-4 text-base leading-7 text-stone-600">
+            <p className="max-w-lg text-base leading-7 text-stone-600 md:text-lg md:leading-8">
               Compare Indian marketplace prices in one clean mobile-first flow before you decide where to buy.
             </p>
+
+            <Link
+              href="/discover"
+              className="mt-1 flex h-14 w-full max-w-xs items-center justify-center gap-2 rounded-[8px] bg-stone-950 px-5 text-base font-black text-white shadow-sm md:w-auto md:min-w-64"
+            >
+              Try it out for free
+              <ArrowRight aria-hidden="true" size={18} />
+            </Link>
           </div>
 
-          <Link
-            href="/discover"
-            className="mt-1 flex h-14 w-full max-w-xs items-center justify-center gap-2 rounded-[8px] bg-stone-950 px-5 text-base font-black text-white shadow-sm"
-          >
-            Try it out for free
-            <ArrowRight aria-hidden="true" size={18} />
-          </Link>
-
-          <div className="flex w-full justify-center pt-2">
+          <div className="flex w-full justify-center pt-2 md:justify-end md:pt-0">
             <Image
               src="/hero-shopping-bags.png"
               alt="Yellow and black shopping bags with a price tag"
               width={512}
               height={512}
-              className="h-auto w-full max-w-[230px] object-contain drop-shadow-xl"
+              className="h-auto w-full max-w-[230px] object-contain drop-shadow-xl md:max-w-[380px] lg:max-w-[440px]"
               priority
             />
           </div>

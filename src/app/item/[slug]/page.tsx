@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink, IndianRupee, ShoppingBag } from "lucide-react";
 import { sortListings, type ProductListing } from "@/lib/search";
@@ -35,9 +36,26 @@ export default async function ItemPage({ searchParams }: ItemPageProps) {
 
   return (
     <main className="min-h-screen bg-stone-50 text-stone-950">
-      <section className="mx-auto flex w-full max-w-md flex-col gap-5 px-4 py-5">
+      <section className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-5 md:px-8 lg:px-10">
+        <header className="hidden items-center justify-between md:flex">
+          <Link href="/" className="flex h-11 items-center gap-1.5">
+            <Image
+              src="/kitne-rupay-logo.png"
+              alt=""
+              width={40}
+              height={40}
+              className="h-9 w-9 object-contain"
+              priority
+            />
+            <span className="font-krona text-[15px] leading-none tracking-normal">Kitne Rupay</span>
+          </Link>
+          <div className="flex h-11 w-11 items-center justify-center rounded-full border border-stone-200 bg-white text-sm font-black text-stone-950 shadow-sm">
+            D
+          </div>
+        </header>
+
         <div className="flex items-center justify-between">
-          <Link href="/discover" className="text-sm font-bold text-teal-700">
+          <Link href="/discover" className="text-sm font-bold text-stone-950">
             Back
           </Link>
           <span className="rounded-full border border-stone-200 bg-white px-3 py-1 text-xs font-semibold text-stone-600">
@@ -45,81 +63,82 @@ export default async function ItemPage({ searchParams }: ItemPageProps) {
           </span>
         </div>
 
-        <section className="overflow-hidden rounded-[8px] border border-stone-200 bg-white shadow-sm">
-          <div className="aspect-[4/5] bg-stone-100">
-            {heroImage ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={heroImage} alt="" className="h-full w-full object-cover" />
-            ) : (
-              <div className="flex h-full items-center justify-center text-stone-400">
-                <ShoppingBag aria-hidden="true" size={48} />
-              </div>
-            )}
-          </div>
-          <div className="space-y-4 p-4">
-            <div>
-              <h1 className="text-2xl font-black leading-8">{query || "Product"}</h1>
-              <p className="mt-2 text-sm leading-6 text-stone-600">
-                Compare live-looking marketplace results before opening the store.
-              </p>
-            </div>
-            <div className="rounded-[8px] bg-emerald-50 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">Cheapest found</p>
-              <div className="mt-2 flex items-end justify-between gap-3">
-                <div>
-                  <p className="flex items-center text-3xl font-black text-emerald-800">
-                    <IndianRupee aria-hidden="true" size={24} />
-                    {cheapest?.price?.replace("₹", "") ?? "Check"}
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-emerald-900">{cheapest?.store ?? "No listing yet"}</p>
+        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <section className="overflow-hidden rounded-[8px] border border-stone-200 bg-white shadow-sm">
+            <div className="aspect-[4/5] bg-stone-100 lg:aspect-square">
+              {heroImage ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={heroImage} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full items-center justify-center text-stone-400">
+                  <ShoppingBag aria-hidden="true" size={48} />
                 </div>
-                {cheapest && (
+              )}
+            </div>
+            <div className="space-y-4 p-4 md:p-6">
+              <div>
+                <h1 className="text-2xl font-black leading-8 md:text-4xl md:leading-[3rem]">{query || "Product"}</h1>
+                <p className="mt-2 text-sm leading-6 text-stone-600 md:text-base md:leading-7">
+                  Compare marketplace results before opening the store.
+                </p>
+              </div>
+              <div className="rounded-[8px] bg-[#E0B71D]/15 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-700">Cheapest found</p>
+                <div className="mt-2 flex items-end justify-between gap-3">
+                  <div>
+                    <p className="flex items-center text-3xl font-black text-stone-950">
+                      <IndianRupee aria-hidden="true" size={24} />
+                      {cheapest?.price?.replace("₹", "") ?? "Check"}
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-stone-700">{cheapest?.store ?? "No listing yet"}</p>
+                  </div>
+                  {cheapest && (
+                    <a
+                      href={cheapest.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex h-11 items-center gap-2 rounded-[8px] bg-stone-950 px-4 text-sm font-bold text-white"
+                    >
+                      Open
+                      <ExternalLink aria-hidden="true" size={16} />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-lg font-black md:text-2xl">Comparison table</h2>
+            {listings.length === 0 ? (
+              <p className="rounded-[8px] border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                Add Google CSE keys to load marketplace comparisons for this item.
+              </p>
+            ) : (
+              <div className="overflow-hidden rounded-[8px] border border-stone-200 bg-white shadow-sm">
+                {listings.slice(0, 10).map((listing) => (
                   <a
-                    href={cheapest.link}
+                    key={listing.id}
+                    href={listing.link}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex h-11 items-center gap-2 rounded-[8px] bg-stone-950 px-4 text-sm font-bold text-white"
+                    className="grid grid-cols-[1fr_auto] gap-3 border-b border-stone-100 p-3 last:border-b-0 md:p-4"
                   >
-                    Open
-                    <ExternalLink aria-hidden="true" size={16} />
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-stone-950">{listing.store}</p>
+                      <p className="line-clamp-1 text-xs text-stone-500">{listing.title}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-black text-stone-950">{listing.price ?? "Open"}</p>
+                      <p className="text-xs text-stone-400">View deal</p>
+                    </div>
                   </a>
-                )}
+                ))}
               </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="space-y-3">
-          <h2 className="text-lg font-black">Comparison table</h2>
-          {listings.length === 0 ? (
-            <p className="rounded-[8px] border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
-              Add Google CSE keys to load marketplace comparisons for this item.
-            </p>
-          ) : (
-            <div className="overflow-hidden rounded-[8px] border border-stone-200 bg-white shadow-sm">
-              {listings.slice(0, 10).map((listing) => (
-                <a
-                  key={listing.id}
-                  href={listing.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="grid grid-cols-[1fr_auto] gap-3 border-b border-stone-100 p-3 last:border-b-0"
-                >
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-stone-950">{listing.store}</p>
-                    <p className="line-clamp-1 text-xs text-stone-500">{listing.title}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-black text-emerald-700">{listing.price ?? "Open"}</p>
-                    <p className="text-xs text-stone-400">View deal</p>
-                  </div>
-                </a>
-              ))}
-            </div>
-          )}
-        </section>
+            )}
+          </section>
+        </div>
       </section>
     </main>
   );
 }
-
