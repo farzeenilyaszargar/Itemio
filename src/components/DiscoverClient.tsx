@@ -142,31 +142,31 @@ export function DiscoverClient() {
           <div className="min-w-0">
             {activeMode === "photo" ? (
               <>
-                <section className="grid gap-6 rounded-[8px] bg-white p-5 shadow-sm ring-1 ring-stone-200 md:grid-cols-[1fr_auto] md:items-center md:p-8">
-                    <div className="space-y-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#E0B71D]/15 text-stone-950">
-                        <Camera aria-hidden="true" size={26} />
-                      </div>
-                      <div>
-                        <h1 className="text-3xl font-black leading-9 md:max-w-xl md:text-5xl md:leading-[3.65rem]">
-                          Snap it. Compare the <span className="text-[#E0B71D]">right</span> price.
-                        </h1>
-                        <p className="mt-3 text-sm leading-6 text-stone-600 md:max-w-lg md:text-base md:leading-7">
-                          Upload a product photo and we’ll look for matching listings across shopping sites.
-                        </p>
-                      </div>
+                <section className="grid gap-6 px-1 py-2 md:grid-cols-[1fr_auto] md:items-end md:px-0 md:py-8">
+                  <div className="space-y-4">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#E0B71D]/15 text-stone-950">
+                      <Camera aria-hidden="true" size={26} />
                     </div>
-                    <label className="flex h-14 cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-black text-white shadow-sm md:w-48">
-                      {isPhotoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
-                      {isPhotoLoading ? "Searching..." : "Choose photo"}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        className="sr-only"
-                        onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
-                      />
-                    </label>
+                    <div>
+                      <h1 className="text-3xl font-black leading-9 md:max-w-xl md:text-5xl md:leading-[3.65rem]">
+                        Snap it. Compare the <span className="text-[#E0B71D]">right</span> price.
+                      </h1>
+                      <p className="mt-3 text-sm leading-6 text-stone-600 md:max-w-lg md:text-base md:leading-7">
+                        Upload a product photo and we’ll look for matching listings across shopping sites.
+                      </p>
+                    </div>
+                  </div>
+                  <label className="flex h-14 cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-black text-white shadow-sm md:w-48">
+                    {isPhotoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
+                    {isPhotoLoading ? "Searching..." : "Choose photo"}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      className="sr-only"
+                      onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
+                    />
+                  </label>
                 </section>
                 <p className="mt-3 px-1 text-xs leading-5 text-stone-500">Use a clear product photo under 500 KB for the best match.</p>
 
@@ -184,7 +184,7 @@ export function DiscoverClient() {
               </>
             ) : (
               <>
-                <section className="space-y-5 rounded-[8px] bg-white p-4 shadow-sm ring-1 ring-stone-200 md:p-8">
+                <section className="space-y-5 px-1 py-2 md:px-0 md:py-8">
                   <div>
                     <h2 className="text-2xl font-black leading-8 md:text-5xl md:leading-[3.65rem]">Search beautiful finds across stores.</h2>
                   </div>
