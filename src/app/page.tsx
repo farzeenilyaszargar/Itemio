@@ -23,7 +23,7 @@ export default function Home() {
         <div className="flex flex-1 flex-col items-start justify-center gap-6 pb-14 pt-6 text-left">
           <div className="max-w-sm">
             <h1 className="text-4xl font-black leading-[2.85rem]">
-              Know the right price before you buy.
+              Know the <span className="text-[#E0B71D]">right</span> price before you buy.
             </h1>
             <p className="mt-4 text-base leading-7 text-stone-600">
               Compare Indian marketplace prices in one clean mobile-first flow before you decide where to buy.
