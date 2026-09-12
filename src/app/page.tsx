@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-stone-50 text-stone-950">
       <section className="mx-auto flex min-h-screen w-full max-w-md flex-col px-5 py-5">
-        <nav className="flex items-center justify-between">
+        {/* <nav className="flex items-center justify-between">
           <div className="flex h-11 items-center gap-1.5">
             <Image
               src="/kitne-rupay-logo.png"
@@ -18,7 +18,7 @@ export default function Home() {
             />
             <div className="font-krona text-[15px] leading-none tracking-normal">Kitne Rupay</div>
           </div>
-        </nav>
+        </nav> */}
 
         <div className="flex flex-1 flex-col items-start justify-center gap-6 pb-14 pt-6 text-left">
           <div className="max-w-sm">
