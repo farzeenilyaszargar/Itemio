@@ -87,7 +87,7 @@ export function DiscoverClient() {
   return (
     <main className="min-h-screen bg-stone-50 text-stone-950">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-5 md:px-8 lg:px-10">
-        <header className="flex items-center justify-between">
+        <header className="hidden items-center justify-between md:flex">
           <Link href="/" className="flex h-11 items-center gap-1.5">
             <Image
               src="/kitne-rupay-logo.png"
