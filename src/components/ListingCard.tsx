@@ -1,4 +1,4 @@
-import { ExternalLink, IndianRupee, Store } from "lucide-react";
+import { ExternalLink, Store } from "lucide-react";
 import type { ProductGroup, ProductListing } from "@/lib/search";
 
 type ListingCardProps = {
@@ -10,7 +10,6 @@ type ListingCardProps = {
 const imageHeightClasses = ["h-52", "h-64", "h-44", "h-60", "h-72", "h-48"];
 
 export function ListingCard({ group, index = 0, onSelect }: ListingCardProps) {
-  const cheapest = group.listings[0];
   const imageHeight = imageHeightClasses[index % imageHeightClasses.length];
 
   return (
@@ -25,19 +24,6 @@ export function ListingCard({ group, index = 0, onSelect }: ListingCardProps) {
               <Store aria-hidden="true" size={36} />
             </div>
           )}
-        </div>
-        <div className="space-y-3 p-3">
-          <div>
-            <h3 className="line-clamp-2 text-sm font-semibold leading-5 text-stone-950">{group.title}</h3>
-            <p className="mt-1 text-xs text-stone-500">{group.listings.length} marketplace match</p>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="inline-flex items-center gap-1 text-sm font-bold text-emerald-700">
-              {cheapest?.price && <IndianRupee aria-hidden="true" size={14} />}
-              {cheapest?.price?.replace("₹", "") ?? "Check price"}
-            </span>
-            <span className="text-xs font-medium text-stone-500">{cheapest?.store}</span>
-          </div>
         </div>
       </button>
     </article>
