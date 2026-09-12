@@ -112,13 +112,8 @@ export default async function ItemPage({ searchParams }: ItemPageProps) {
             </div>
           </section>
 
-          <section className="space-y-3">
-            <h2 className="text-lg font-black md:text-2xl">Comparison table</h2>
-            {listings.length === 0 ? (
-              <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">
-                Add a SerpApi key to load marketplace comparisons for this item.
-              </p>
-            ) : (
+          {listings.length > 0 && (
+            <section className="space-y-3">
               <div className="overflow-hidden rounded-[8px] bg-white shadow-sm ring-1 ring-stone-200">
                 {listings.slice(0, 10).map((listing) => (
                   <a
@@ -139,8 +134,8 @@ export default async function ItemPage({ searchParams }: ItemPageProps) {
                   </a>
                 ))}
               </div>
-            )}
-          </section>
+            </section>
+          )}
         </div>
       </section>
     </main>
