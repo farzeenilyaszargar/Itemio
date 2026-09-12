@@ -104,7 +104,7 @@ export function DiscoverClient() {
           </div>
         </header>
 
-        <div className="relative grid grid-cols-2 rounded-full border border-stone-200 bg-white p-1 shadow-sm md:mx-auto md:w-full md:max-w-md">
+        <div className="relative grid grid-cols-2 rounded-full bg-white p-1 shadow-sm ring-1 ring-stone-200 md:mx-auto md:w-full md:max-w-md">
           <div
             className={`absolute bottom-1 top-1 w-[calc(50%-4px)] rounded-full bg-stone-950 shadow-sm transition-transform duration-300 ease-out ${
               activeMode === "browse" ? "translate-x-[calc(100%+8px)]" : "translate-x-0"
@@ -138,10 +138,9 @@ export function DiscoverClient() {
           <div className="min-w-0">
             {activeMode === "photo" ? (
               <>
-                <section className="overflow-hidden rounded-[8px] border border-stone-200 bg-white shadow-sm">
-                  <div className="grid gap-6 p-5 md:grid-cols-[1fr_auto] md:items-center md:p-8">
+                <section className="grid gap-6 rounded-[8px] bg-white p-5 shadow-sm ring-1 ring-stone-200 md:grid-cols-[1fr_auto] md:items-center md:p-8">
                     <div className="space-y-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-[8px] bg-[#E0B71D]/15 text-stone-950">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#E0B71D]/15 text-stone-950">
                         <Camera aria-hidden="true" size={26} />
                       </div>
                       <div>
@@ -153,7 +152,7 @@ export function DiscoverClient() {
                         </p>
                       </div>
                     </div>
-                    <label className="flex h-14 cursor-pointer items-center justify-center gap-2 rounded-[8px] bg-stone-950 px-4 text-sm font-black text-white shadow-sm md:w-48">
+                    <label className="flex h-14 cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-black text-white shadow-sm md:w-48">
                       {isPhotoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
                       {isPhotoLoading ? "Searching..." : "Choose photo"}
                       <input
@@ -164,17 +163,14 @@ export function DiscoverClient() {
                         onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
                       />
                     </label>
-                  </div>
-                  <div className="border-t border-stone-100 bg-stone-50 px-5 py-3 md:px-8">
-                    <p className="text-xs leading-5 text-stone-500">Use a clear product photo under 500 KB for the best match.</p>
-                  </div>
                 </section>
+                <p className="mt-3 px-1 text-xs leading-5 text-stone-500">Use a clear product photo under 500 KB for the best match.</p>
 
                 {(photoStatus || photoListings.length > 0) && (
                   <section className="mt-6 space-y-3">
                     <h2 className="text-lg font-black">Photo matches</h2>
-                    {photoStatus && <p className="rounded-[8px] border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{photoStatus}</p>}
-                    <div className="grid gap-3 lg:grid-cols-2">
+                    {photoStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{photoStatus}</p>}
+                    <div className="divide-y divide-stone-200 rounded-[8px] bg-white px-4 shadow-sm ring-1 ring-stone-200 lg:grid lg:grid-cols-2 lg:divide-x lg:divide-y-0 lg:px-0">
                       {photoListings.slice(0, 8).map((listing) => (
                         <CompactListing key={listing.id} listing={listing} />
                       ))}
@@ -184,7 +180,7 @@ export function DiscoverClient() {
               </>
             ) : (
               <>
-                <section className="space-y-5 rounded-[8px] border border-stone-200 bg-white p-4 shadow-sm md:p-8">
+                <section className="space-y-5 rounded-[8px] bg-white p-4 shadow-sm ring-1 ring-stone-200 md:p-8">
                   <div>
                     <h2 className="text-2xl font-black leading-8 md:text-5xl md:leading-[3.65rem]">Search beautiful finds across stores.</h2>
                   </div>
@@ -195,19 +191,19 @@ export function DiscoverClient() {
                         value={query}
                         onChange={(event) => setQuery(event.target.value)}
                         placeholder="Search trousers, lipstick, headphones..."
-                        className="h-12 w-full rounded-[8px] border border-stone-300 bg-stone-50 pl-10 pr-3 text-sm outline-none ring-stone-950 focus:ring-2"
+                        className="h-12 w-full rounded-full bg-stone-100 pl-10 pr-3 text-sm outline-none ring-stone-950 transition focus:bg-white focus:ring-2"
                       />
                     </div>
                     <button
                       type="submit"
-                      className="flex h-12 w-12 items-center justify-center rounded-[8px] bg-stone-950 text-white disabled:opacity-60 md:w-14"
+                      className="flex h-12 w-12 items-center justify-center rounded-full bg-stone-950 text-white disabled:opacity-60 md:w-14"
                       disabled={isTextLoading}
                       aria-label="Search"
                     >
                       {isTextLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
                     </button>
                   </form>
-                  {textStatus && <p className="rounded-[8px] border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">{textStatus}</p>}
+                  {textStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{textStatus}</p>}
                 </section>
 
                 <section className="grid grid-cols-2 gap-3 pb-8 pt-6 md:grid-cols-3 lg:grid-cols-4">

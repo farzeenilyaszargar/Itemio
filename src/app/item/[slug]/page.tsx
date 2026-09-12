@@ -58,13 +58,13 @@ export default async function ItemPage({ searchParams }: ItemPageProps) {
           <Link href="/discover" className="text-sm font-bold text-stone-950">
             Back
           </Link>
-          <span className="rounded-full border border-stone-200 bg-white px-3 py-1 text-xs font-semibold text-stone-600">
+          <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-stone-600 shadow-sm ring-1 ring-stone-200">
             Price compare
           </span>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <section className="overflow-hidden rounded-[8px] border border-stone-200 bg-white shadow-sm">
+          <section className="overflow-hidden rounded-[8px] bg-white shadow-sm ring-1 ring-stone-200">
             <div className="aspect-[4/5] bg-stone-100 lg:aspect-square">
               {heroImage ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -82,7 +82,7 @@ export default async function ItemPage({ searchParams }: ItemPageProps) {
                   Compare marketplace results before opening the store.
                 </p>
               </div>
-              <div className="rounded-[8px] bg-[#E0B71D]/15 p-4">
+              <div className="border-t border-stone-100 pt-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-700">Cheapest found</p>
                 <div className="mt-2 flex items-end justify-between gap-3">
                   <div>
@@ -97,7 +97,7 @@ export default async function ItemPage({ searchParams }: ItemPageProps) {
                       href={cheapest.link}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex h-11 items-center gap-2 rounded-[8px] bg-stone-950 px-4 text-sm font-bold text-white"
+                      className="flex h-11 items-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-bold text-white"
                     >
                       Open
                       <ExternalLink aria-hidden="true" size={16} />
@@ -111,11 +111,11 @@ export default async function ItemPage({ searchParams }: ItemPageProps) {
           <section className="space-y-3">
             <h2 className="text-lg font-black md:text-2xl">Comparison table</h2>
             {listings.length === 0 ? (
-              <p className="rounded-[8px] border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+              <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">
                 Add a SerpApi key to load marketplace comparisons for this item.
               </p>
             ) : (
-              <div className="overflow-hidden rounded-[8px] border border-stone-200 bg-white shadow-sm">
+              <div className="overflow-hidden rounded-[8px] bg-white shadow-sm ring-1 ring-stone-200">
                 {listings.slice(0, 10).map((listing) => (
                   <a
                     key={listing.id}

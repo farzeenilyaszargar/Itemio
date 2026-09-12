@@ -10,7 +10,7 @@ export function ListingCard({ group }: ListingCardProps) {
   const cheapest = group.listings[0];
 
   return (
-    <article className="overflow-hidden rounded-[8px] border border-stone-200 bg-white shadow-sm">
+    <article className="overflow-hidden rounded-[8px] bg-white shadow-sm ring-1 ring-stone-200">
       <Link href={`/item/${group.id}?q=${encodeURIComponent(group.title)}`} className="block">
         <div className="aspect-[4/5] bg-stone-100">
           {group.image ? (
@@ -46,7 +46,7 @@ export function CompactListing({ listing }: { listing: ProductListing }) {
       href={listing.link}
       target="_blank"
       rel="noreferrer"
-      className="grid grid-cols-[64px_1fr_auto] gap-3 rounded-[8px] border border-stone-200 bg-white p-2 shadow-sm"
+      className="grid grid-cols-[64px_1fr_auto] gap-3 bg-white py-3 lg:px-4"
     >
       <div className="h-16 w-16 overflow-hidden rounded-[8px] bg-stone-100">
         {listing.image ? (
@@ -70,4 +70,3 @@ export function CompactListing({ listing }: { listing: ProductListing }) {
     </a>
   );
 }
-
