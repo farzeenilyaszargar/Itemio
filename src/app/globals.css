@@ -24,3 +24,15 @@ a,
 input {
   -webkit-tap-highlight-color: transparent;
 }
+
+@keyframes sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,17 +1,17 @@
-import Link from "next/link";
 import { ExternalLink, IndianRupee, Store } from "lucide-react";
 import type { ProductGroup, ProductListing } from "@/lib/search";
 
 type ListingCardProps = {
   group: ProductGroup;
+  onSelect?: (group: ProductGroup) => void;
 };
 
-export function ListingCard({ group }: ListingCardProps) {
+export function ListingCard({ group, onSelect }: ListingCardProps) {
   const cheapest = group.listings[0];
 
   return (
     <article className="overflow-hidden rounded-[8px] bg-white shadow-sm ring-1 ring-stone-200">
-      <Link href={`/item/${group.id}?q=${encodeURIComponent(group.title)}`} className="block">
+      <button type="button" onClick={() => onSelect?.(group)} className="block w-full text-left">
         <div className="aspect-[4/5] bg-stone-100">
           {group.image ? (
             // eslint-disable-next-line @next/next/no-img-element
@@ -35,7 +35,7 @@ export function ListingCard({ group }: ListingCardProps) {
             <span className="text-xs font-medium text-stone-500">{cheapest?.store}</span>
           </div>
         </div>
-      </Link>
+      </button>
     </article>
   );
 }

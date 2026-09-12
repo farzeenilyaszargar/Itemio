@@ -1,13 +1,13 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Camera, Loader2, Search, Upload, User } from "lucide-react";
+import { Camera, ExternalLink, IndianRupee, Loader2, Search, Upload, User, X } from "lucide-react";
 import { CompactListing, ListingCard } from "@/components/ListingCard";
 import { readBrowseListingsCache, writeBrowseListingsCache } from "@/lib/browse-cache";
 import { demoBrowseListings } from "@/lib/demo-listings";
-import { groupListings, type ProductListing } from "@/lib/search";
+import { groupListings, sortListings, type ProductGroup, type ProductListing } from "@/lib/search";
 
 type SearchResponse = {
   listings?: ProductListing[];
@@ -30,9 +30,23 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
   const [textStatus, setTextStatus] = useState("");
   const [isPhotoLoading, setIsPhotoLoading] = useState(false);
   const [isTextLoading, setIsTextLoading] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState<ProductGroup | null>(null);
 
   const productGroups = useMemo(() => groupListings(textListings.length ? textListings : demoBrowseListings), [textListings]);
   const hasOverflowContent = photoStatus || photoListings.length > 0 || textStatus || productGroups.length > 0;
+
+  useEffect(() => {
+    if (!selectedGroup) {
+      return;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [selectedGroup]);
 
   function setMode(mode: DiscoverMode) {
     setActiveMode(mode);
@@ -239,7 +253,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
 
                 <section className="grid grid-cols-2 gap-3 pb-8 pt-6 md:grid-cols-3 lg:grid-cols-4">
                   {productGroups.map((group) => (
-                    <ListingCard key={group.id} group={group} />
+                    <ListingCard key={group.id} group={group} onSelect={setSelectedGroup} />
                   ))}
                 </section>
               </>
@@ -247,6 +261,101 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
           </div>
         </div>
       </section>
+
+      {selectedGroup && <ProductDetailSheet group={selectedGroup} onClose={() => setSelectedGroup(null)} />}
     </main>
+  );
+}
+
+function ProductDetailSheet({ group, onClose }: { group: ProductGroup; onClose: () => void }) {
+  const listings = sortListings(group.listings);
+  const cheapest = listings[0];
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center">
+      <button
+        type="button"
+        aria-label="Close item details"
+        onClick={onClose}
+        className="absolute inset-0 bg-stone-950/60 backdrop-blur-[2px] transition-opacity"
+      />
+      <section className="relative z-10 max-h-[88dvh] w-full max-w-2xl animate-[sheet-up_220ms_ease-out] overflow-y-auto rounded-t-[28px] bg-stone-50 px-4 pb-6 pt-3 shadow-2xl md:rounded-t-[32px] md:px-6 md:pb-8">
+        <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-stone-300" />
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-400">Best match</p>
+            <h2 className="mt-1 text-2xl font-black leading-8 text-stone-950 md:text-3xl md:leading-10">{group.title}</h2>
+          </div>
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={onClose}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-stone-950 shadow-sm ring-1 ring-stone-200"
+          >
+            <X aria-hidden="true" size={18} />
+          </button>
+        </div>
+
+        <div className="mt-5 grid gap-5 md:grid-cols-[0.85fr_1.15fr]">
+          <div className="overflow-hidden rounded-[8px] bg-stone-100">
+            {group.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={group.image} alt="" className="aspect-[4/5] h-full w-full object-cover" />
+            ) : (
+              <div className="flex aspect-[4/5] items-center justify-center text-stone-400">
+                <Camera aria-hidden="true" size={36} />
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <div className="rounded-[8px] bg-white p-4 shadow-sm ring-1 ring-stone-200">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">Cheapest found</p>
+              <div className="mt-2 flex items-end justify-between gap-3">
+                <div>
+                  <p className="flex items-center text-3xl font-black text-stone-950">
+                    <IndianRupee aria-hidden="true" size={24} />
+                    {cheapest?.price?.replace("₹", "") ?? "Check"}
+                  </p>
+                  <p className="mt-1 text-sm font-semibold text-stone-600">{cheapest?.store ?? "Open listing"}</p>
+                </div>
+                {cheapest && (
+                  <a
+                    href={cheapest.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex h-11 items-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-bold text-white"
+                  >
+                    Open
+                    <ExternalLink aria-hidden="true" size={16} />
+                  </a>
+                )}
+              </div>
+            </div>
+
+            <div className="overflow-hidden rounded-[8px] bg-white shadow-sm ring-1 ring-stone-200">
+              {listings.map((listing) => (
+                <a
+                  key={listing.id}
+                  href={listing.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="grid grid-cols-[1fr_auto] gap-3 border-b border-stone-100 p-3 last:border-b-0"
+                >
+                  <div className="min-w-0">
+                    <p className="text-sm font-black text-stone-950">{listing.store}</p>
+                    <p className="mt-0.5 line-clamp-1 text-xs text-stone-500">{listing.availability ?? listing.domain}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-black text-stone-950">{listing.price ?? "Open"}</p>
+                    <p className="text-xs text-stone-400">View deal</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }
