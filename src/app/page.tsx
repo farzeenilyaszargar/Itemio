@@ -27,7 +27,7 @@ export default function Home() {
           </button>
         </nav>
 
-        <div className="grid flex-1 items-center gap-5 pb-4 pt-3 text-left md:grid-cols-[1fr_0.85fr] md:gap-14 md:pb-8 md:pt-10 lg:gap-20">
+        <div className="grid flex-1 content-center items-center gap-5 py-4 text-left md:grid-cols-[1fr_0.85fr] md:gap-14 md:py-8 lg:gap-20">
           <div className="flex max-w-xl flex-col items-start gap-5 md:gap-6">
             <h1 className="text-[2.5rem] font-black leading-[2.8rem] md:text-6xl md:leading-[4.35rem]">
               Know the <span className="text-[#E0B71D]">right</span> price before you buy.
