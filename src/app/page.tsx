@@ -38,7 +38,7 @@ export default function Home() {
 
             <Link
               href="/discover"
-              className="mt-1 flex h-14 w-full max-w-xs items-center justify-center gap-2 rounded-[8px] bg-stone-950 px-5 text-base font-black text-white shadow-sm md:w-auto md:min-w-64"
+              className="mt-1 flex h-14 w-full max-w-[260px] items-center justify-between gap-3 rounded-full bg-stone-950 px-6 text-left text-base font-black text-white shadow-sm md:w-60"
             >
               Try it out for free
               <ArrowRight aria-hidden="true" size={18} />
