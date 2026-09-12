@@ -112,24 +112,34 @@ export function DiscoverClient() {
 
         {activeMode === "photo" ? (
           <>
-            <section className="rounded-[8px] bg-teal-950 p-5 text-white shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-200">Photo search</p>
-              <h1 className="mt-3 text-3xl font-black leading-9">Take a photo. Find the real market price.</h1>
-              <p className="mt-3 text-sm leading-6 text-teal-50">
-                Upload a product image and Kitne Rupay checks Indian shopping sites for matching listings.
-              </p>
-              <label className="mt-5 flex h-14 cursor-pointer items-center justify-center gap-2 rounded-[8px] bg-amber-300 px-4 text-sm font-black text-stone-950 shadow-sm">
-                {isPhotoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Camera aria-hidden="true" size={18} />}
-                {isPhotoLoading ? "Searching..." : "Take photo or upload"}
-                <input
-                  type="file"
-                  accept="image/*"
-                  capture="environment"
-                  className="sr-only"
-                  onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
-                />
-              </label>
-              <p className="mt-3 text-xs text-teal-100">Images up to 500 KB work best with the current Google Lens upload API.</p>
+            <section className="overflow-hidden rounded-[8px] border border-stone-200 bg-white shadow-sm">
+              <div className="space-y-4 p-5">
+                <div className="flex h-14 w-14 items-center justify-center rounded-[8px] bg-[#E0B71D]/15 text-stone-950">
+                  <Camera aria-hidden="true" size={26} />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-black leading-9">
+                    Snap it. Compare the <span className="text-[#E0B71D]">right</span> price.
+                  </h1>
+                  <p className="mt-3 text-sm leading-6 text-stone-600">
+                    Upload a product photo and we’ll look for matching listings across shopping sites.
+                  </p>
+                </div>
+                <label className="flex h-14 cursor-pointer items-center justify-center gap-2 rounded-[8px] bg-stone-950 px-4 text-sm font-black text-white shadow-sm">
+                  {isPhotoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
+                  {isPhotoLoading ? "Searching..." : "Choose photo"}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    className="sr-only"
+                    onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
+                  />
+                </label>
+              </div>
+              <div className="border-t border-stone-100 bg-stone-50 px-5 py-3">
+                <p className="text-xs leading-5 text-stone-500">Use a clear product photo under 500 KB for the best match.</p>
+              </div>
             </section>
 
             {(photoStatus || photoListings.length > 0) && (
