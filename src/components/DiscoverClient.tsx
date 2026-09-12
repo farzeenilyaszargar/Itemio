@@ -198,7 +198,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                       />
                     </label>
                   </section>
-                  <p className="mt-2 max-w-md px-1 text-xs leading-5 text-stone-400">Use a clear product photo under 500 KB for the best match.</p>
+                  <p className="mt-2 max-w-md px-1 text-[11px] leading-4 text-stone-400">Use a clear product photo under 500 KB for the best match.</p>
                 </div>
 
                 {(photoStatus || photoListings.length > 0) && (
