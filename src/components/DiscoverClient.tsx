@@ -40,11 +40,13 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
   const [isTextLoading, setIsTextLoading] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<ProductGroup | null>(null);
   const [isSheetClosing, setIsSheetClosing] = useState(false);
+  const [slideDirection, setSlideDirection] = useState<"left" | "right">("left");
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
 
   const shuffledDemoListings = useMemo(() => shuffleListings(demoBrowseListings), []);
   const productGroups = useMemo(() => groupListings(textListings.length ? textListings : shuffledDemoListings), [shuffledDemoListings, textListings]);
-  const hasOverflowContent = photoStatus || photoListings.length > 0 || textStatus || productGroups.length > 0;
+  const photoHasResults = Boolean(photoStatus || photoListings.length > 0);
+  const hasOverflowContent = activeMode === "browse" || photoHasResults;
 
   useEffect(() => {
     if (!selectedGroup) {
@@ -60,6 +62,10 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
   }, [selectedGroup]);
 
   function setMode(mode: DiscoverMode) {
+    if (mode !== activeMode) {
+      setSlideDirection(mode === "browse" ? "left" : "right");
+    }
+
     setActiveMode(mode);
 
     if (typeof window !== "undefined") {
@@ -235,16 +241,20 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
           </button>
         </div>
 
-        <div className="flex min-h-0 flex-1 overflow-x-hidden">
+        <div className="grid min-h-0 flex-1 gap-4 overflow-x-hidden md:gap-6">
           <div
-            className={`flex min-h-full w-[200%] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-              activeMode === "browse" ? "-translate-x-1/2" : "translate-x-0"
+            key={activeMode}
+            className={`flex min-h-0 flex-1 flex-col ${
+              slideDirection === "left"
+                ? "animate-[section-in-left_320ms_cubic-bezier(0.22,1,0.36,1)]"
+                : "animate-[section-in-right_320ms_cubic-bezier(0.22,1,0.36,1)]"
             }`}
           >
-            <div className="flex min-h-full w-1/2 shrink-0 flex-col pr-2" aria-hidden={activeMode !== "photo"}>
+            {activeMode === "photo" ? (
+              <>
                 <div
                   className={`flex flex-col ${
-                    photoStatus || photoListings.length > 0
+                    photoHasResults
                       ? ""
                       : "min-h-0 flex-1 items-center justify-center text-center"
                   }`}
@@ -280,7 +290,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                   <p className="mt-2 max-w-md px-1 text-[11px] leading-4 text-stone-400">Use a clear product photo under 500 KB for the best match.</p>
                 </div>
 
-                {(photoStatus || photoListings.length > 0) && (
+                {photoHasResults && (
                   <section className="mt-6 space-y-3">
                     <h2 className="text-lg font-black">Photo matches</h2>
                     {photoStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{photoStatus}</p>}
@@ -291,9 +301,9 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                     </div>
                   </section>
                 )}
-            </div>
-
-            <div className="flex min-h-full w-1/2 shrink-0 flex-col pl-2" aria-hidden={activeMode !== "browse"}>
+              </>
+            ) : (
+              <>
                 <section className="relative space-y-5 px-1 py-1 md:px-0 md:py-8">
                   <div className="flex items-center gap-3">
                     <Image
@@ -335,7 +345,8 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                     </div>
                   </div>
                 )}
-            </div>
+              </>
+            )}
           </div>
         </div>
       </section>

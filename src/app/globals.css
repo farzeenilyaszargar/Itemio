@@ -86,3 +86,27 @@ input {
     transform: translateY(28px);
   }
 }
+
+@keyframes section-in-left {
+  from {
+    opacity: 0.85;
+    transform: translateX(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes section-in-right {
+  from {
+    opacity: 0.85;
+    transform: translateX(-28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
