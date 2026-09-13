@@ -22,6 +22,13 @@ type DiscoverClientProps = {
   initialMode?: DiscoverMode;
 };
 
+type UploadedPhoto = {
+  url: string;
+  name: string;
+  size: number;
+  type: string;
+};
+
 function shuffleListings(listings: ProductListing[]) {
   return [...listings]
     .map((listing) => ({ listing, sort: Math.random() }))
@@ -31,6 +38,7 @@ function shuffleListings(listings: ProductListing[]) {
 
 export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
   const [activeMode, setActiveMode] = useState<DiscoverMode>(initialMode);
+  const [uploadedPhoto, setUploadedPhoto] = useState<UploadedPhoto | null>(null);
   const [photoListings, setPhotoListings] = useState<ProductListing[]>([]);
   const [textListings, setTextListings] = useState<ProductListing[]>(() => readBrowseListingsCache());
   const [query, setQuery] = useState("");
@@ -46,7 +54,14 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
   const shuffledDemoListings = useMemo(() => shuffleListings(demoBrowseListings), []);
   const productGroups = useMemo(() => groupListings(textListings.length ? textListings : shuffledDemoListings), [shuffledDemoListings, textListings]);
   const photoHasResults = Boolean(photoStatus || photoListings.length > 0);
-  const hasOverflowContent = activeMode === "browse" || photoHasResults;
+  const hasUploadedPhoto = Boolean(uploadedPhoto);
+  const sortedPhotoListings = useMemo(() => sortListings(photoListings), [photoListings]);
+  const bestPhotoListing = sortedPhotoListings[0];
+  const hasOverflowContent = activeMode === "browse" || photoHasResults || hasUploadedPhoto;
+  const uploadedPhotoSize = uploadedPhoto ? `${Math.max(uploadedPhoto.size / 1024, 1).toFixed(0)} KB` : "";
+  const uploadedPhotoType = uploadedPhoto?.type ? uploadedPhoto.type.replace("image/", "").toUpperCase() : "Image";
+  const uploadedPhotoName = uploadedPhoto?.name || "Uploaded photo";
+  const bestPhotoPrice = isPhotoLoading ? "Checking" : (bestPhotoListing?.price ?? "Not found");
 
   useEffect(() => {
     if (!selectedGroup) {
@@ -60,6 +75,14 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
       document.body.style.overflow = originalOverflow;
     };
   }, [selectedGroup]);
+
+  useEffect(() => {
+    return () => {
+      if (uploadedPhoto) {
+        URL.revokeObjectURL(uploadedPhoto.url);
+      }
+    };
+  }, [uploadedPhoto]);
 
   function setMode(mode: DiscoverMode) {
     if (mode !== activeMode) {
@@ -126,6 +149,13 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
       return;
     }
 
+    const nextPhotoUrl = URL.createObjectURL(file);
+    setUploadedPhoto({
+      url: nextPhotoUrl,
+      name: file.name,
+      size: file.size,
+      type: file.type,
+    });
     setIsPhotoLoading(true);
     setPhotoStatus("");
     setPhotoListings([]);
@@ -252,54 +282,95 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
           >
             {activeMode === "photo" ? (
               <>
-                <div
-                  className={`flex flex-col ${
-                    photoHasResults
-                      ? ""
-                      : "min-h-0 flex-1 items-center justify-center text-center"
-                  }`}
-                >
-                  <section className="flex w-full max-w-2xl flex-col items-center gap-5 px-1 py-1 md:px-0 md:py-8">
-                    <div className="flex flex-col items-center gap-3 md:gap-4">
-                      <Image
-                        src="/photo-camera-icon.webp"
-                        alt=""
-                        width={1254}
-                        height={1254}
-                        className="h-auto w-28 md:w-36"
-                        priority
-                      />
-                      <div>
-                        <h1 className="text-[1.65rem] font-black leading-[2.05rem] text-stone-950 md:text-5xl md:leading-[3.65rem]">
-                          Check The <span className="text-[#E0B71D]">Right</span> Price
-                        </h1>
-                      </div>
+                {uploadedPhoto ? (
+                  <section className="flex min-h-0 flex-1 flex-col gap-5">
+                    <div className="overflow-hidden rounded-[10px] bg-stone-100">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={uploadedPhoto.url} alt="Uploaded item" className="block max-h-[48dvh] w-full object-contain" />
                     </div>
-                    <label className="flex h-14 w-full max-w-[240px] cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-black text-white shadow-sm">
-                      {isPhotoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
-                      {isPhotoLoading ? "Searching..." : "Choose photo"}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        capture="environment"
-                        className="sr-only"
-                        onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
-                      />
-                    </label>
-                  </section>
-                  <p className="mt-2 max-w-md px-1 text-[11px] leading-4 text-stone-400">Use a clear product photo under 500 KB for the best match.</p>
-                </div>
 
-                {photoHasResults && (
-                  <section className="mt-6 space-y-3">
-                    <h2 className="text-lg font-black">Photo matches</h2>
-                    {photoStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{photoStatus}</p>}
-                    <div className="divide-y divide-stone-200 rounded-[8px] bg-white px-4 ring-1 ring-stone-200 lg:grid lg:grid-cols-2 lg:divide-x lg:divide-y-0 lg:px-0">
-                      {photoListings.slice(0, 8).map((listing) => (
-                        <CompactListing key={listing.id} listing={listing} />
-                      ))}
-                    </div>
+                    <section className="space-y-3">
+                      <div>
+                        <h1 className="text-[1.45rem] font-black leading-8 text-stone-950">Photo details</h1>
+                        <p className="mt-1 line-clamp-1 text-xs font-semibold text-stone-500">{uploadedPhotoName}</p>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="rounded-[8px] bg-white p-3 ring-1 ring-stone-200">
+                          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-stone-400">File</p>
+                          <p className="mt-1 text-sm font-black text-stone-950">{uploadedPhotoType}</p>
+                        </div>
+                        <div className="rounded-[8px] bg-white p-3 ring-1 ring-stone-200">
+                          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-stone-400">Size</p>
+                          <p className="mt-1 text-sm font-black text-stone-950">{uploadedPhotoSize}</p>
+                        </div>
+                        <div className="rounded-[8px] bg-white p-3 ring-1 ring-stone-200">
+                          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-stone-400">Matches</p>
+                          <p className="mt-1 text-sm font-black text-stone-950">{isPhotoLoading ? "Searching" : photoListings.length || "0"}</p>
+                        </div>
+                        <div className="rounded-[8px] bg-white p-3 ring-1 ring-stone-200">
+                          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-stone-400">Best price</p>
+                          <p className="mt-1 text-sm font-black text-stone-950">{bestPhotoPrice}</p>
+                        </div>
+                      </div>
+
+                      <label className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-5 text-sm font-black text-white">
+                        {isPhotoLoading ? <Loader2 aria-hidden="true" size={17} className="animate-spin" /> : <Upload aria-hidden="true" size={17} />}
+                        {isPhotoLoading ? "Searching..." : "Change photo"}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          capture="environment"
+                          className="sr-only"
+                          onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
+                        />
+                      </label>
+                    </section>
+
+                    {(photoStatus || photoListings.length > 0) && (
+                      <section className="space-y-3 pb-8">
+                        <h2 className="text-lg font-black">Marketplace matches</h2>
+                        {photoStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{photoStatus}</p>}
+                        <div className="divide-y divide-stone-200 rounded-[8px] bg-white px-4 ring-1 ring-stone-200">
+                          {photoListings.slice(0, 8).map((listing) => (
+                            <CompactListing key={listing.id} listing={listing} />
+                          ))}
+                        </div>
+                      </section>
+                    )}
                   </section>
+                ) : (
+                  <div className="flex min-h-0 flex-1 flex-col items-center justify-center text-center">
+                    <section className="flex w-full flex-col items-center gap-5 px-1 py-1 md:px-0 md:py-8">
+                      <div className="flex flex-col items-center gap-3 md:gap-4">
+                        <Image
+                          src="/photo-camera-icon.webp"
+                          alt=""
+                          width={1254}
+                          height={1254}
+                          className="h-auto w-28 md:w-36"
+                          priority
+                        />
+                        <div>
+                          <h1 className="text-[1.65rem] font-black leading-[2.05rem] text-stone-950 md:text-5xl md:leading-[3.65rem]">
+                            Check The <span className="text-[#E0B71D]">Right</span> Price
+                          </h1>
+                        </div>
+                      </div>
+                      <label className="flex h-14 w-[min(100%,240px)] cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-black text-white shadow-sm">
+                        {isPhotoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
+                        {isPhotoLoading ? "Searching..." : "Choose photo"}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          capture="environment"
+                          className="sr-only"
+                          onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
+                        />
+                      </label>
+                    </section>
+                    <p className="mt-2 px-1 text-[11px] leading-4 text-stone-400">Use a clear product photo under 500 KB for the best match.</p>
+                  </div>
                 )}
               </>
             ) : (
