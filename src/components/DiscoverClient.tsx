@@ -280,9 +280,16 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
               <>
                 {uploadedPhoto ? (
                   <section className="flex min-h-0 flex-1 flex-col gap-5">
-                    <div className="overflow-hidden rounded-[22px] bg-stone-100">
+                    <div className="relative overflow-hidden rounded-[22px] bg-stone-100">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={uploadedPhoto.url} alt="Uploaded item" className="block max-h-[48dvh] w-full object-contain" />
+                      {isPhotoLoading && (
+                        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[22px]">
+                          <div className="absolute inset-0 bg-[linear-gradient(rgba(224,183,29,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(224,183,29,0.18)_1px,transparent_1px)] bg-[size:28px_28px] animate-[analysis-grid_1.8s_linear_infinite]" />
+                          <div className="absolute inset-x-0 top-0 h-20 animate-[analysis-scan_1.6s_ease-in-out_infinite] bg-gradient-to-b from-transparent via-[#E0B71D]/35 to-transparent" />
+                          <div className="absolute inset-0 bg-stone-950/10" />
+                        </div>
+                      )}
                     </div>
 
                     <h1 className="text-[clamp(1.25rem,6vw,1.65rem)] font-black leading-tight text-stone-950">
