@@ -41,18 +41,18 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/itemio-logo.png",
-        width: 1035,
-        height: 1142,
-        alt: "Itemio logo",
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Itemio price comparison preview",
       },
     ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Itemio",
     description: "Compare prices across Indian marketplaces from a product photo or search.",
-    images: ["/itemio-logo.png"],
+    images: ["/og-image.png"],
   },
 };
 
