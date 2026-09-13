@@ -292,8 +292,8 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                       )}
                     </div>
 
-                    <h1 className="text-[clamp(1.25rem,6vw,1.65rem)] font-black leading-tight text-stone-950">
-                      Marketplace <span className="text-[#E0B71D]">Matches ({photoMatchCount})</span>
+                    <h1 className="text-[clamp(1.05rem,5vw,1.3rem)] font-black leading-tight text-stone-950">
+                      Marketplace <span className="text-[#E0B71D]">Matches</span> ({photoMatchCount})
                     </h1>
 
                     {(photoStatus || photoListings.length > 0) && (
