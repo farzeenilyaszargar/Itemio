@@ -235,13 +235,13 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
           </button>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-x-hidden">
+        <div className="flex min-h-0 flex-1 overflow-x-hidden">
           <div
-            className={`flex w-[200%] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            className={`flex min-h-full w-[200%] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
               activeMode === "browse" ? "-translate-x-1/2" : "translate-x-0"
             }`}
           >
-            <div className="w-1/2 shrink-0 pr-2" aria-hidden={activeMode !== "photo"}>
+            <div className="flex min-h-full w-1/2 shrink-0 flex-col pr-2" aria-hidden={activeMode !== "photo"}>
                 <div
                   className={`flex flex-col ${
                     photoStatus || photoListings.length > 0
@@ -293,7 +293,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                 )}
             </div>
 
-            <div className="w-1/2 shrink-0 pl-2" aria-hidden={activeMode !== "browse"}>
+            <div className="flex min-h-full w-1/2 shrink-0 flex-col pl-2" aria-hidden={activeMode !== "browse"}>
                 <section className="relative space-y-5 px-1 py-1 md:px-0 md:py-8">
                   <div className="flex items-center gap-3">
                     <Image
