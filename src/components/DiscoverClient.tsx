@@ -458,7 +458,7 @@ function ProductDetailSheet({
           <div className="overflow-hidden rounded-[8px] bg-stone-100">
             {group.image ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={group.image} alt="" className="block h-auto w-full" />
+              <img src={group.image} alt="" className="block max-h-[58dvh] w-full object-contain" />
             ) : (
               <div className="flex aspect-[4/5] items-center justify-center text-stone-400">
                 <Camera aria-hidden="true" size={36} />
