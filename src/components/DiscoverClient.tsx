@@ -280,30 +280,14 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
               <>
                 {uploadedPhoto ? (
                   <section className="flex min-h-0 flex-1 flex-col gap-5">
-                    <div className="overflow-hidden rounded-[10px] bg-stone-100">
+                    <div className="overflow-hidden rounded-[22px] bg-stone-100">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={uploadedPhoto.url} alt="Uploaded item" className="block max-h-[48dvh] w-full object-contain" />
                     </div>
 
-                    <section className="flex flex-col gap-3">
-                      <div className="flex flex-wrap items-center justify-between gap-3">
-                        <h1 className="text-[clamp(1.25rem,6vw,1.65rem)] font-black leading-tight text-stone-950">
-                          Marketplace <span className="text-[#E0B71D]">Matches ({photoMatchCount})</span>
-                        </h1>
-                      </div>
-
-                      <label className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-5 text-sm font-black text-white min-[360px]:w-auto">
-                        {isPhotoLoading ? <Loader2 aria-hidden="true" size={17} className="animate-spin" /> : <Upload aria-hidden="true" size={17} />}
-                        {isPhotoLoading ? "Searching..." : "Change photo"}
-                        <input
-                          type="file"
-                          accept="image/*"
-                          capture="environment"
-                          className="sr-only"
-                          onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
-                        />
-                      </label>
-                    </section>
+                    <h1 className="text-[clamp(1.25rem,6vw,1.65rem)] font-black leading-tight text-stone-950">
+                      Marketplace <span className="text-[#E0B71D]">Matches ({photoMatchCount})</span>
+                    </h1>
 
                     {(photoStatus || photoListings.length > 0) && (
                       <section className="space-y-3 pb-8">
