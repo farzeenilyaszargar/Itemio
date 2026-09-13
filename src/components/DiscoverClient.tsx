@@ -22,6 +22,8 @@ type DiscoverClientProps = {
   initialMode?: DiscoverMode;
 };
 
+const apiErrorMessage = "API Rate Limited RN Plz Try Later";
+
 type UploadedPhoto = {
   url: string;
   name: string;
@@ -166,13 +168,13 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
       });
       const data = (await response.json()) as SearchResponse;
       if (!response.ok) {
-        setPhotoStatus(data.hint ?? data.error ?? "Photo search could not run right now.");
+        setPhotoStatus(apiErrorMessage);
         return;
       }
       setPhotoListings(data.listings ?? []);
-      setPhotoStatus(data.listings?.length ? "" : "No Indian marketplace matches found for this photo.");
+      setPhotoStatus(data.listings?.length ? "" : apiErrorMessage);
     } catch {
-      setPhotoStatus("Photo search failed. Please try again on a stable connection.");
+      setPhotoStatus(apiErrorMessage);
     } finally {
       setIsPhotoLoading(false);
     }
@@ -192,15 +194,15 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
       const response = await fetch(`/api/search/text?q=${encodeURIComponent(query.trim())}`);
       const data = (await response.json()) as SearchResponse;
       if (!response.ok) {
-        setTextStatus(data.hint ?? data.error ?? "Search could not run right now.");
+        setTextStatus(apiErrorMessage);
         return;
       }
       const nextListings = data.listings ?? [];
       setTextListings(nextListings);
       writeBrowseListingsCache(nextListings);
-      setTextStatus(nextListings.length ? (data.hint ?? "") : (data.hint ?? "Search is temporarily unavailable. Please try again in a little while."));
+      setTextStatus(data.hint || !nextListings.length ? apiErrorMessage : "");
     } catch {
-      setTextStatus("Search failed. Please try again on a stable connection.");
+      setTextStatus(apiErrorMessage);
     } finally {
       setIsTextLoading(false);
     }
@@ -298,7 +300,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
 
                     {(photoStatus || photoListings.length > 0) && (
                       <section className="space-y-3 pb-8">
-                        {photoStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{photoStatus}</p>}
+                        {photoStatus && <ApiErrorBox onClose={() => setPhotoStatus("")} />}
                         <div className="divide-y divide-stone-200 rounded-[8px] bg-white px-4 ring-1 ring-stone-200">
                           {photoListings.slice(0, 8).map((listing) => (
                             <CompactListing key={listing.id} listing={listing} />
@@ -368,7 +370,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                       />
                     </div>
                   </form>
-                  {textStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{textStatus}</p>}
+                  {textStatus && <ApiErrorBox onClose={() => setTextStatus("")} />}
                 </section>
 
                 <section className="columns-2 gap-4 pb-8 pt-6">
@@ -402,6 +404,22 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
         />
       )}
     </main>
+  );
+}
+
+function ApiErrorBox({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-[14px] bg-stone-950 px-4 py-3 text-white">
+      <p className="text-sm font-black leading-5">{apiErrorMessage}</p>
+      <button
+        type="button"
+        aria-label="Close error"
+        onClick={onClose}
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition active:scale-95"
+      >
+        <X aria-hidden="true" size={16} />
+      </button>
+    </div>
   );
 }
 
