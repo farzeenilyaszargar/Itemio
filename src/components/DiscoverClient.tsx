@@ -272,7 +272,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                         value={query}
                         onChange={(event) => setQuery(event.target.value)}
                         placeholder="Search trousers, lipstick, headphones..."
-                        className="h-12 w-full rounded-full bg-stone-100 pl-10 pr-3 text-sm outline-none ring-stone-950 transition focus:bg-white focus:ring-2"
+                        className="h-12 w-full rounded-full bg-stone-200 pl-10 pr-3 text-sm outline-none ring-stone-950 transition focus:bg-white focus:ring-2"
                       />
                     </div>
                   </form>
