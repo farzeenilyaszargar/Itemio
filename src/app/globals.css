@@ -19,6 +19,12 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
+html {
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 * {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -32,6 +38,12 @@ button,
 a,
 input {
   -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+select {
+  font-size: 16px;
 }
 
 .scrollbar-hidden {
