@@ -32,6 +32,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
   const [isPhotoLoading, setIsPhotoLoading] = useState(false);
   const [isTextLoading, setIsTextLoading] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<ProductGroup | null>(null);
+  const [isSheetClosing, setIsSheetClosing] = useState(false);
 
   const productGroups = useMemo(() => groupListings(textListings.length ? textListings : demoBrowseListings), [textListings]);
   const hasOverflowContent = photoStatus || photoListings.length > 0 || textStatus || productGroups.length > 0;
@@ -57,6 +58,15 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
       url.searchParams.set("mode", mode);
       window.history.replaceState(null, "", url);
     }
+  }
+
+  function openProductSheet(group: ProductGroup) {
+    setIsSheetClosing(false);
+    setSelectedGroup(group);
+  }
+
+  function closeProductSheet() {
+    setIsSheetClosing(true);
   }
 
   async function handlePhotoUpload(file?: File) {
@@ -252,7 +262,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
 
                 <section className="columns-2 gap-3 pb-8 pt-6">
                   {productGroups.map((group) => (
-                    <ListingCard key={group.id} group={group} onSelect={setSelectedGroup} />
+                    <ListingCard key={group.id} group={group} onSelect={openProductSheet} />
                   ))}
                 </section>
               </>
@@ -261,25 +271,56 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
         </div>
       </section>
 
-      {selectedGroup && <ProductDetailSheet group={selectedGroup} onClose={() => setSelectedGroup(null)} />}
+      {selectedGroup && (
+        <ProductDetailSheet
+          group={selectedGroup}
+          isClosing={isSheetClosing}
+          onClose={closeProductSheet}
+          onClosed={() => {
+            setSelectedGroup(null);
+            setIsSheetClosing(false);
+          }}
+        />
+      )}
     </main>
   );
 }
 
-function ProductDetailSheet({ group, onClose }: { group: ProductGroup; onClose: () => void }) {
+function ProductDetailSheet({
+  group,
+  isClosing,
+  onClose,
+  onClosed,
+}: {
+  group: ProductGroup;
+  isClosing: boolean;
+  onClose: () => void;
+  onClosed: () => void;
+}) {
   const listings = sortListings(group.listings);
   const cheapest = listings[0];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center">
+    <div className="fixed inset-0 z-50 flex items-end justify-center overscroll-none">
       <button
         type="button"
         aria-label="Close item details"
         onClick={onClose}
-        className="absolute inset-0 bg-stone-950/60 backdrop-blur-[2px] transition-opacity"
+        className={`absolute inset-0 bg-stone-950/60 backdrop-blur-[2px] ${
+          isClosing ? "animate-[backdrop-out_220ms_ease-out_forwards]" : "animate-[backdrop-in_180ms_ease-out]"
+        }`}
       />
-      <section className="relative z-10 max-h-[88dvh] w-full max-w-2xl animate-[sheet-up_220ms_ease-out] overflow-y-auto rounded-t-[28px] bg-stone-50 px-4 pb-6 pt-3 md:rounded-t-[32px] md:px-6 md:pb-8">
-        <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-stone-300" />
+      <section
+        onAnimationEnd={() => {
+          if (isClosing) {
+            onClosed();
+          }
+        }}
+        className={`scrollbar-hidden relative z-10 max-h-[88dvh] w-full max-w-2xl overflow-y-auto overscroll-contain rounded-t-[28px] bg-stone-50 px-4 pb-6 pt-3 md:rounded-t-[32px] md:px-6 md:pb-8 ${
+          isClosing ? "animate-[sheet-down_220ms_ease-out_forwards]" : "animate-[sheet-up_220ms_ease-out]"
+        }`}
+      >
+        <div className="mx-auto mb-3 h-1.5 w-12 touch-none rounded-full bg-stone-300" />
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="text-2xl font-black leading-8 text-stone-950 md:text-3xl md:leading-10">{group.title}</h2>
