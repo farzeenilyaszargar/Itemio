@@ -20,7 +20,7 @@ const kronaOne = Krona_One({
 
 export const metadata: Metadata = {
   metadataBase: process.env.NEXT_PUBLIC_APP_URL ? new URL(process.env.NEXT_PUBLIC_APP_URL) : undefined,
-  title: "Itemio",
+  title: "Itemio | Find Item Prices & Compare Prices of Items",
   description: "Itemio helps shoppers compare prices across Indian marketplaces from a product photo or search.",
   applicationName: "Itemio",
   keywords: [
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     apple: "/itemio-logo.png",
   },
   openGraph: {
-    title: "Itemio",
+    title: "Itemio | Find Item Prices & Compare Prices of Items",
     description: "Compare prices across Indian marketplaces from a product photo or search.",
     siteName: "Itemio",
     type: "website",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Itemio",
+    title: "Itemio | Find Item Prices & Compare Prices of Items",
     description: "Compare prices across Indian marketplaces from a product photo or search.",
     images: ["/og-image.png"],
   },
