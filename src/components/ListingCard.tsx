@@ -31,7 +31,8 @@ export function ListingCard({ group, onSelect }: ListingCardProps) {
     <article className="mb-5 inline-block w-full break-inside-avoid">
       <button type="button" onClick={() => onSelect?.(group)} className="group block w-full text-left">
         <div className={`relative flex min-h-40 items-center justify-center overflow-hidden rounded-[22px] ${canvasClass} p-3`}>
-          <div className="absolute right-3 top-3 rounded-full bg-white/75 px-2.5 py-1 text-[10px] font-black text-stone-700 backdrop-blur">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_35%_20%,rgba(255,255,255,0.55),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.22),rgba(255,255,255,0))]" />
+          <div className="absolute right-3 top-3 rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-black text-stone-700 backdrop-blur">
             {storeCount} {storeCount === 1 ? "store" : "stores"}
           </div>
           {group.image ? (
@@ -39,7 +40,7 @@ export function ListingCard({ group, onSelect }: ListingCardProps) {
             <img
               src={group.image}
               alt=""
-              className="block max-h-60 w-full object-contain mix-blend-multiply transition duration-300 group-active:scale-[0.98]"
+              className="relative block max-h-60 w-full object-contain transition duration-300 group-active:scale-[0.98]"
             />
           ) : (
             <div className="flex aspect-[4/5] items-center justify-center text-stone-500">
