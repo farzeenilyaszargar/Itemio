@@ -209,8 +209,8 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                         priority
                       />
                       <div>
-                        <h1 className="text-[1.65rem] font-black leading-[2.05rem] text-[#E0B71D] md:text-5xl md:leading-[3.65rem]">
-                          Check The Right Price
+                        <h1 className="text-[1.65rem] font-black leading-[2.05rem] text-stone-950 md:text-5xl md:leading-[3.65rem]">
+                          Check The <span className="text-[#E0B71D]">Right</span> Price
                         </h1>
                       </div>
                     </div>
