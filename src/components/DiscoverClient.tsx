@@ -314,7 +314,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                     <section className="flex w-full flex-col items-center gap-5 px-1 py-1 md:px-0 md:py-8">
                       <div className="flex flex-col items-center gap-3 md:gap-4">
                         <Image
-                          src="/photo-camera-icon.webp"
+                          src="/itemio-camera-icon.webp"
                           alt=""
                           width={1254}
                           height={1254}
