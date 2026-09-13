@@ -11,14 +11,14 @@ export default function Home() {
         <nav className="hidden items-center justify-between md:flex">
           <div className="flex h-11 items-center gap-1.5">
             <Image
-              src="/kitne-rupay-logo.webp"
+              src="/itemio-logo.webp"
               alt=""
               width={40}
               height={40}
               className="h-9 w-9 object-contain"
               priority
             />
-            <div className="hidden font-krona text-[15px] leading-none tracking-normal md:block">Kitne Rupay</div>
+            <div className="hidden font-krona text-[15px] leading-none tracking-normal md:block">Itemio</div>
           </div>
           <button
             type="button"

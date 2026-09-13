@@ -19,11 +19,40 @@ const kronaOne = Krona_One({
 });
 
 export const metadata: Metadata = {
-  title: "Kitne Rupay",
-  description: "Photo-first Indian marketplace price comparison.",
+  metadataBase: process.env.NEXT_PUBLIC_APP_URL ? new URL(process.env.NEXT_PUBLIC_APP_URL) : undefined,
+  title: "Itemio",
+  description: "Itemio helps shoppers compare prices across Indian marketplaces from a product photo or search.",
+  applicationName: "Itemio",
+  keywords: [
+    "Itemio",
+    "price comparison India",
+    "photo price search",
+    "Indian marketplace comparison",
+    "shopping price finder",
+  ],
   icons: {
-    icon: "/kitne-rupay-logo.png",
-    apple: "/kitne-rupay-logo.png",
+    icon: "/itemio-logo.png",
+    apple: "/itemio-logo.png",
+  },
+  openGraph: {
+    title: "Itemio",
+    description: "Compare prices across Indian marketplaces from a product photo or search.",
+    siteName: "Itemio",
+    type: "website",
+    images: [
+      {
+        url: "/itemio-logo.png",
+        width: 1035,
+        height: 1142,
+        alt: "Itemio logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Itemio",
+    description: "Compare prices across Indian marketplaces from a product photo or search.",
+    images: ["/itemio-logo.png"],
   },
 };
 

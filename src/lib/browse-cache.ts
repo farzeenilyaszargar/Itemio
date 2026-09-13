@@ -1,6 +1,6 @@
 import { groupListings, type ProductGroup, type ProductListing } from "@/lib/search";
 
-const browseListingsCacheKey = "kitne-rupay:browse-listings";
+const browseListingsCacheKey = "itemio:browse-listings";
 
 function isListing(value: unknown): value is ProductListing {
   if (!value || typeof value !== "object") {

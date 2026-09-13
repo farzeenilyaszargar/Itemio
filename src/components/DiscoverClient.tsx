@@ -219,14 +219,14 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
         <header className="hidden items-center justify-between md:flex">
           <Link href="/" className="flex h-11 items-center gap-1.5">
             <Image
-              src="/kitne-rupay-logo.webp"
+              src="/itemio-logo.webp"
               alt=""
               width={40}
               height={40}
               className="h-9 w-9 object-contain"
               priority
             />
-            <span className="hidden font-krona text-[15px] leading-none tracking-normal md:inline">Kitne Rupay</span>
+            <span className="hidden font-krona text-[15px] leading-none tracking-normal md:inline">Itemio</span>
           </Link>
           <button
             type="button"
