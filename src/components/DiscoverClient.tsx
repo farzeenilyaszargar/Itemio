@@ -251,7 +251,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
               </>
             ) : (
               <>
-                <section className="space-y-5 px-1 py-1 md:px-0 md:py-8">
+                <section className="relative space-y-5 px-1 py-1 md:px-0 md:py-8">
                   <div>
                     <Image
                       src="/browse-cart-icon.png"
@@ -276,12 +276,6 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                       />
                     </div>
                   </form>
-                  {isTextLoading && (
-                    <div className="mx-auto flex h-20 w-20 items-center justify-center overflow-hidden rounded-[18px] bg-white ring-1 ring-stone-200">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="/loading-cart.gif" alt="" className="h-28 w-28 max-w-none object-cover object-center" />
-                    </div>
-                  )}
                   {textStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{textStatus}</p>}
                 </section>
 
@@ -290,6 +284,14 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                     <ListingCard key={group.id} group={group} onSelect={openProductSheet} />
                   ))}
                 </section>
+                {isTextLoading && (
+                  <div className="fixed inset-0 z-40 flex items-center justify-center bg-stone-950/45 backdrop-blur-[1px]">
+                    <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-[18px] bg-white ring-1 ring-white/70">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/loading-cart.gif" alt="" className="h-28 w-28 max-w-none object-cover object-center" />
+                    </div>
+                  </div>
+                )}
               </>
             )}
           </div>
