@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, TouchEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, PointerEvent, TouchEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Camera, ExternalLink, IndianRupee, Loader2, Search, Upload, User, X } from "lucide-react";
@@ -366,6 +366,45 @@ function ProductDetailSheet({
 }) {
   const listings = sortListings(group.listings);
   const cheapest = listings[0];
+  const [sheetDragY, setSheetDragY] = useState(0);
+  const [isSheetDragging, setIsSheetDragging] = useState(false);
+  const sheetDragStart = useRef<{ y: number; pointerId: number } | null>(null);
+
+  function startSheetDrag(event: PointerEvent<HTMLButtonElement>) {
+    if (isClosing) {
+      return;
+    }
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+    sheetDragStart.current = { y: event.clientY, pointerId: event.pointerId };
+    setIsSheetDragging(true);
+  }
+
+  function moveSheetDrag(event: PointerEvent<HTMLButtonElement>) {
+    if (!sheetDragStart.current || sheetDragStart.current.pointerId !== event.pointerId) {
+      return;
+    }
+
+    const nextDragY = Math.min(Math.max(event.clientY - sheetDragStart.current.y, 0), 180);
+    setSheetDragY(nextDragY);
+  }
+
+  function endSheetDrag(event: PointerEvent<HTMLButtonElement>) {
+    if (!sheetDragStart.current || sheetDragStart.current.pointerId !== event.pointerId) {
+      return;
+    }
+
+    const shouldClose = sheetDragY > 72;
+    sheetDragStart.current = null;
+    setIsSheetDragging(false);
+
+    if (shouldClose) {
+      onClose();
+      return;
+    }
+
+    setSheetDragY(0);
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center overscroll-none">
@@ -383,11 +422,24 @@ function ProductDetailSheet({
             onClosed();
           }
         }}
+        style={isSheetDragging || sheetDragY > 0 ? { transform: `translateY(${sheetDragY}px)` } : undefined}
         className={`scrollbar-hidden relative z-10 max-h-[88dvh] w-full max-w-2xl overflow-y-auto overscroll-contain rounded-t-[28px] bg-stone-50 px-4 pb-6 pt-3 md:rounded-t-[32px] md:px-6 md:pb-8 ${
+          isSheetDragging ? "" : "transition-transform duration-200 ease-out"
+        } ${
           isClosing ? "animate-[sheet-down_220ms_ease-out_forwards]" : "animate-[sheet-up_220ms_ease-out]"
         }`}
       >
-        <div className="mx-auto mb-3 h-1.5 w-12 touch-none rounded-full bg-stone-300" />
+        <button
+          type="button"
+          aria-label="Drag down to close"
+          onPointerDown={startSheetDrag}
+          onPointerMove={moveSheetDrag}
+          onPointerUp={endSheetDrag}
+          onPointerCancel={endSheetDrag}
+          className="mx-auto mb-3 flex h-7 w-24 touch-none cursor-grab items-center justify-center active:cursor-grabbing"
+        >
+          <span className="h-1.5 w-12 rounded-full bg-stone-300" />
+        </button>
         <div className="flex items-center justify-between gap-3">
           <div>
             <h2 className="text-2xl font-black leading-8 text-stone-950 md:text-3xl md:leading-10">{group.title}</h2>
