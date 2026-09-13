@@ -40,10 +40,10 @@ export default function Home() {
 
             <Link
               href="/discover"
-              className="flex h-13 w-full max-w-[240px] items-center justify-between gap-3 rounded-full bg-stone-950 px-6 text-left text-[15px] font-black text-white shadow-sm md:h-14 md:w-60 md:max-w-[260px] md:text-base"
+              className="flex h-11 w-[205px] items-center justify-between gap-3 rounded-full bg-stone-950 px-5 text-left text-sm font-black text-white shadow-sm"
             >
               Try it out for free
-              <ArrowRight aria-hidden="true" size={18} />
+              <ArrowRight aria-hidden="true" size={16} />
             </Link>
           </div>
 
