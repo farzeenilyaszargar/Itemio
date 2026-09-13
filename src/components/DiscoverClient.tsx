@@ -199,7 +199,15 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                   }`}
                 >
                   <section className="flex w-full max-w-2xl flex-col items-center gap-5 px-1 py-1 md:px-0 md:py-8">
-                    <div className="flex flex-col items-center gap-2 md:gap-3">
+                    <div className="flex flex-col items-center gap-3 md:gap-4">
+                      <Image
+                        src="/photo-camera-icon.jpeg"
+                        alt=""
+                        width={736}
+                        height={736}
+                        className="h-auto w-28 opacity-45 mix-blend-multiply grayscale brightness-125 contrast-50 md:w-36"
+                        priority
+                      />
                       <div>
                         <h1 className="text-[1.65rem] font-black leading-[2.05rem] md:text-5xl md:leading-[3.65rem]">
                           Check The <span className="text-[#E0B71D]">Right</span> Price
