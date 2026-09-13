@@ -51,7 +51,7 @@ export function ListingCard({ group, onSelect }: ListingCardProps) {
         <div className="px-1 pt-2.5">
           <h3 className="line-clamp-2 text-[13px] font-black leading-[17px] text-stone-950">{group.title}</h3>
           <div className="mt-1.5 flex items-center justify-between gap-2">
-            <p className="text-[13px] font-black leading-5 text-[#1F7A3F]">{cheapest?.price ?? "Check price"}</p>
+            <p className="text-[13px] font-black leading-5 text-[#E0B71D]">{cheapest?.price ?? "Check price"}</p>
             <p className="truncate text-[11px] font-semibold leading-4 text-stone-400">{cheapest?.store}</p>
           </div>
         </div>
@@ -85,7 +85,7 @@ export function CompactListing({ listing }: { listing: ProductListing }) {
       </div>
       <div className="flex flex-col items-end justify-between">
         <ExternalLink aria-hidden="true" size={16} className="text-stone-400" />
-        <span className="whitespace-nowrap text-sm font-bold text-emerald-700">{listing.price ?? "Open"}</span>
+        <span className="whitespace-nowrap text-sm font-bold text-[#E0B71D]">{listing.price ?? "Open"}</span>
       </div>
     </a>
   );
