@@ -6,27 +6,52 @@ type ListingCardProps = {
   onSelect?: (group: ProductGroup) => void;
 };
 
+const productCanvases = [
+  "bg-[#F6E9B9]",
+  "bg-[#DDE7D3]",
+  "bg-[#E9D8CE]",
+  "bg-[#D9E5ED]",
+  "bg-[#EEE7DA]",
+  "bg-[#E5DEEE]",
+  "bg-[#DDE6DF]",
+  "bg-[#F0D6C8]",
+];
+
+function getCanvasClass(id: string) {
+  const index = [...id].reduce((sum, char) => sum + char.charCodeAt(0), 0) % productCanvases.length;
+  return productCanvases[index];
+}
+
 export function ListingCard({ group, onSelect }: ListingCardProps) {
   const cheapest = group.listings[0];
+  const storeCount = new Set(group.listings.map((listing) => listing.store)).size;
+  const canvasClass = getCanvasClass(group.id);
 
   return (
-    <article className="mb-4 inline-block w-full break-inside-avoid overflow-hidden rounded-[8px] bg-white">
-      <button type="button" onClick={() => onSelect?.(group)} className="block w-full text-left">
-        <div className="flex max-h-64 items-center justify-center bg-stone-100">
+    <article className="mb-5 inline-block w-full break-inside-avoid">
+      <button type="button" onClick={() => onSelect?.(group)} className="group block w-full text-left">
+        <div className={`relative flex min-h-40 items-center justify-center overflow-hidden rounded-[22px] ${canvasClass} p-3`}>
+          <div className="absolute right-3 top-3 rounded-full bg-white/75 px-2.5 py-1 text-[10px] font-black text-stone-700 backdrop-blur">
+            {storeCount} {storeCount === 1 ? "store" : "stores"}
+          </div>
           {group.image ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={group.image} alt="" className="block max-h-64 w-full object-contain" />
+            <img
+              src={group.image}
+              alt=""
+              className="block max-h-60 w-full object-contain mix-blend-multiply transition duration-300 group-active:scale-[0.98]"
+            />
           ) : (
-            <div className="flex aspect-[4/5] items-center justify-center text-stone-400">
+            <div className="flex aspect-[4/5] items-center justify-center text-stone-500">
               <Store aria-hidden="true" size={36} />
             </div>
           )}
         </div>
-        <div className="px-1.5 pb-1 pt-2">
-          <h3 className="line-clamp-2 text-[13px] font-semibold leading-[18px] text-stone-950">{group.title}</h3>
-          <div className="mt-1 flex items-center justify-between gap-2">
-            <p className="text-sm font-black leading-5 text-emerald-700">{cheapest?.price ?? "Check price"}</p>
-            <p className="truncate text-[11px] font-medium leading-4 text-stone-400">{cheapest?.store}</p>
+        <div className="px-1 pt-2.5">
+          <h3 className="line-clamp-2 text-[13px] font-black leading-[17px] text-stone-950">{group.title}</h3>
+          <div className="mt-1.5 flex items-center justify-between gap-2">
+            <p className="text-[13px] font-black leading-5 text-[#1F7A3F]">{cheapest?.price ?? "Check price"}</p>
+            <p className="truncate text-[11px] font-semibold leading-4 text-stone-400">{cheapest?.store}</p>
           </div>
         </div>
       </button>
