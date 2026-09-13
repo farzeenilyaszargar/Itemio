@@ -252,16 +252,16 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
             ) : (
               <>
                 <section className="relative space-y-5 px-1 py-1 md:px-0 md:py-8">
-                  <div>
+                  <div className="flex items-center gap-3">
                     <Image
                       src="/browse-cart-icon.png"
                       alt=""
                       width={1254}
                       height={1254}
-                      className="mb-3 h-auto w-24"
+                      className="h-auto w-16 shrink-0"
                       priority
                     />
-                    <h2 className="text-[2rem] font-black leading-[2.45rem] md:text-5xl md:leading-[3.65rem]">
+                    <h2 className="text-[1.75rem] font-black leading-[2.1rem] md:text-5xl md:leading-[3.65rem]">
                       Search <span className="text-[#E0B71D]">beautiful</span> finds across stores
                     </h2>
                   </div>
