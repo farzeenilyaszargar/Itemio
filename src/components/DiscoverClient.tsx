@@ -204,9 +204,6 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                         <h1 className="text-[2rem] font-black leading-[2.45rem] md:text-5xl md:leading-[3.65rem]">
                           Check The <span className="text-[#E0B71D]">Right</span> Price
                         </h1>
-                        <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-stone-600 md:text-base md:leading-7">
-                          Upload a product photo and we’ll look for matching listings across shopping sites.
-                        </p>
                       </div>
                     </div>
                     <label className="flex h-14 w-full max-w-[240px] cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-black text-white shadow-sm">
