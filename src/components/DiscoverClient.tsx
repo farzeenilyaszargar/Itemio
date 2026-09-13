@@ -17,13 +17,10 @@ type SearchResponse = {
 };
 
 type DiscoverMode = "photo" | "browse";
-type BrowseCategory = "All" | "Beauty" | "Tech" | "Fashion" | "Jewellery" | "Home";
 
 type DiscoverClientProps = {
   initialMode?: DiscoverMode;
 };
-
-const browseCategories: BrowseCategory[] = ["All", "Beauty", "Tech", "Fashion", "Jewellery", "Home"];
 
 function shuffleListings(listings: ProductListing[]) {
   return [...listings]
@@ -32,31 +29,8 @@ function shuffleListings(listings: ProductListing[]) {
     .map(({ listing }) => listing);
 }
 
-function getBrowseCategory(title: string): Exclude<BrowseCategory, "All"> {
-  const value = title.toLowerCase();
-
-  if (/lipstick|kajal|serum|toner|face wash|glycolic|niacinamide|lakme|maybelline|nykaa|mamaearth|plum|minimalist/.test(value)) {
-    return "Beauty";
-  }
-
-  if (/ring|jhumka|earring|bracelet|giva|voylla|chimes/.test(value)) {
-    return "Jewellery";
-  }
-
-  if (/jeans|shirt|hoodie|sneaker|kurta|polo|backpack|biba|libas|puma|nike|adidas|roadster|allen solly|h&m|w for woman/.test(value)) {
-    return "Fashion";
-  }
-
-  if (/bottle|notebook|sticky|pens|calculator|sticker|milton|borosil|classmate|post-it|faber-castell/.test(value)) {
-    return "Home";
-  }
-
-  return "Tech";
-}
-
 export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
   const [activeMode, setActiveMode] = useState<DiscoverMode>(initialMode);
-  const [activeCategory, setActiveCategory] = useState<BrowseCategory>("All");
   const [photoListings, setPhotoListings] = useState<ProductListing[]>([]);
   const [textListings, setTextListings] = useState<ProductListing[]>(() => readBrowseListingsCache());
   const [query, setQuery] = useState("");
@@ -69,13 +43,6 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
 
   const shuffledDemoListings = useMemo(() => shuffleListings(demoBrowseListings), []);
   const productGroups = useMemo(() => groupListings(textListings.length ? textListings : shuffledDemoListings), [shuffledDemoListings, textListings]);
-  const filteredProductGroups = useMemo(() => {
-    if (activeCategory === "All") {
-      return productGroups;
-    }
-
-    return productGroups.filter((group) => getBrowseCategory(group.title) === activeCategory);
-  }, [activeCategory, productGroups]);
   const hasOverflowContent = photoStatus || photoListings.length > 0 || textStatus || productGroups.length > 0;
 
   useEffect(() => {
@@ -306,26 +273,10 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                     </div>
                   </form>
                   {textStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{textStatus}</p>}
-                  <div className="scrollbar-hidden -mx-4 flex gap-2 overflow-x-auto px-4">
-                    {browseCategories.map((category) => (
-                      <button
-                        key={category}
-                        type="button"
-                        onClick={() => setActiveCategory(category)}
-                        className={`h-9 shrink-0 rounded-full px-4 text-xs font-black transition-colors ${
-                          activeCategory === category
-                            ? "bg-stone-950 text-white"
-                            : "bg-stone-100 text-stone-500"
-                        }`}
-                      >
-                        {category}
-                      </button>
-                    ))}
-                  </div>
                 </section>
 
                 <section className="columns-2 gap-4 pb-8 pt-6">
-                  {filteredProductGroups.map((group) => (
+                  {productGroups.map((group) => (
                     <ListingCard key={group.id} group={group} onSelect={openProductSheet} />
                   ))}
                 </section>
