@@ -40,7 +40,7 @@ export function ListingCard({ group, onSelect }: ListingCardProps) {
             <img
               src={group.image}
               alt=""
-              className="relative block max-h-60 w-full object-contain transition duration-300 group-active:scale-[0.98]"
+              className="relative block max-h-60 w-full object-contain mix-blend-multiply transition duration-300 group-active:scale-[0.98]"
             />
           ) : (
             <div className="flex aspect-[4/5] items-center justify-center text-stone-500">
