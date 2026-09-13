@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, TouchEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Camera, ExternalLink, IndianRupee, Loader2, Search, Upload, User, X } from "lucide-react";
@@ -40,6 +40,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
   const [isTextLoading, setIsTextLoading] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<ProductGroup | null>(null);
   const [isSheetClosing, setIsSheetClosing] = useState(false);
+  const swipeStart = useRef<{ x: number; y: number } | null>(null);
 
   const shuffledDemoListings = useMemo(() => shuffleListings(demoBrowseListings), []);
   const productGroups = useMemo(() => groupListings(textListings.length ? textListings : shuffledDemoListings), [shuffledDemoListings, textListings]);
@@ -75,6 +76,43 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
 
   function closeProductSheet() {
     setIsSheetClosing(true);
+  }
+
+  function shouldIgnoreSwipe(target: EventTarget) {
+    return target instanceof HTMLElement && Boolean(target.closest("button, a, input, label, textarea, select"));
+  }
+
+  function handleTouchStart(event: TouchEvent<HTMLElement>) {
+    if (shouldIgnoreSwipe(event.target)) {
+      swipeStart.current = null;
+      return;
+    }
+
+    const touch = event.touches[0];
+    swipeStart.current = { x: touch.clientX, y: touch.clientY };
+  }
+
+  function handleTouchEnd(event: TouchEvent<HTMLElement>) {
+    if (!swipeStart.current || selectedGroup) {
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - swipeStart.current.x;
+    const deltaY = touch.clientY - swipeStart.current.y;
+    swipeStart.current = null;
+
+    if (Math.abs(deltaX) < 56 || Math.abs(deltaX) < Math.abs(deltaY) * 1.2) {
+      return;
+    }
+
+    if (deltaX < 0 && activeMode === "photo") {
+      setMode("browse");
+    }
+
+    if (deltaX > 0 && activeMode === "browse") {
+      setMode("photo");
+    }
   }
 
   async function handlePhotoUpload(file?: File) {
@@ -140,6 +178,8 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
     <main className="min-h-dvh bg-stone-50 text-stone-950">
       <MobileOnlyNotice />
       <section
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
         className={`mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-4 md:hidden ${
           hasOverflowContent ? "min-h-dvh" : "h-dvh overflow-hidden"
         }`}
