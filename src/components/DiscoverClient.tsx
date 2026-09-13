@@ -22,7 +22,7 @@ type DiscoverClientProps = {
   initialMode?: DiscoverMode;
 };
 
-const apiErrorMessage = "API Rate Limited RN Plz Try Later";
+const apiErrorMessage = "Search is temporarily unavailable. Please try again shortly.";
 
 type UploadedPhoto = {
   url: string;
