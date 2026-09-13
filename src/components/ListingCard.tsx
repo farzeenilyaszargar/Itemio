@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { ExternalLink, Store } from "lucide-react";
 import type { ProductGroup, ProductListing } from "@/lib/search";
 
@@ -22,6 +25,51 @@ function getCanvasClass(id: string) {
   return productCanvases[index];
 }
 
+function shouldFallbackBlend(title: string) {
+  return !/\b(kurta|dress|shirt|t-shirt|tee|jeans|trouser|jacket|saree|model|runner)\b/i.test(title);
+}
+
+function ProductCardImage({ image, title }: { image: string; title: string }) {
+  const [shouldBlend, setShouldBlend] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let isActive = true;
+
+    async function analyzeBackground() {
+      try {
+        const response = await fetch(`/api/image/background?url=${encodeURIComponent(image)}`);
+        const data = (await response.json()) as { analyzed?: boolean; shouldBlend?: boolean };
+
+        if (isActive) {
+          setShouldBlend(data.analyzed ? Boolean(data.shouldBlend) : shouldFallbackBlend(title));
+        }
+      } catch {
+        if (isActive) {
+          setShouldBlend(shouldFallbackBlend(title));
+        }
+      }
+    }
+
+    void analyzeBackground();
+
+    return () => {
+      isActive = false;
+    };
+  }, [image, title]);
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={image}
+      alt=""
+      onError={() => setShouldBlend(false)}
+      className={`relative block max-h-60 w-full object-contain transition duration-300 group-active:scale-[0.98] ${
+        shouldBlend ?? shouldFallbackBlend(title) ? "mix-blend-multiply" : ""
+      }`}
+    />
+  );
+}
+
 export function ListingCard({ group, onSelect }: ListingCardProps) {
   const cheapest = group.listings[0];
   const storeCount = new Set(group.listings.map((listing) => listing.store)).size;
@@ -36,12 +84,7 @@ export function ListingCard({ group, onSelect }: ListingCardProps) {
             {storeCount} {storeCount === 1 ? "store" : "stores"}
           </div>
           {group.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={group.image}
-              alt=""
-              className="relative block max-h-60 w-full object-contain mix-blend-multiply transition duration-300 group-active:scale-[0.98]"
-            />
+            <ProductCardImage image={group.image} title={group.title} />
           ) : (
             <div className="flex aspect-[4/5] items-center justify-center text-stone-500">
               <Store aria-hidden="true" size={36} />
