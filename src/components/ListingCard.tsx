@@ -32,7 +32,7 @@ export function ListingCard({ group, onSelect }: ListingCardProps) {
       <button type="button" onClick={() => onSelect?.(group)} className="group block w-full text-left">
         <div className={`relative flex min-h-40 items-center justify-center overflow-hidden rounded-[22px] ${canvasClass} p-3`}>
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_35%_20%,rgba(255,255,255,0.55),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.22),rgba(255,255,255,0))]" />
-          <div className="absolute right-3 top-3 rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-black text-stone-700 backdrop-blur">
+          <div className="absolute right-3 top-3 z-10 rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-black text-stone-700 backdrop-blur">
             {storeCount} {storeCount === 1 ? "store" : "stores"}
           </div>
           {group.image ? (
