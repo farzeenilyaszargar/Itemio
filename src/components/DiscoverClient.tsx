@@ -50,19 +50,19 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
   const [isTextLoading, setIsTextLoading] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<ProductGroup | null>(null);
   const [isSheetClosing, setIsSheetClosing] = useState(false);
+  const [isPhotoMatchesOpen, setIsPhotoMatchesOpen] = useState(false);
+  const [isPhotoMatchesClosing, setIsPhotoMatchesClosing] = useState(false);
   const [slideDirection, setSlideDirection] = useState<"left" | "right">("left");
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
 
   const shuffledDemoListings = useMemo(() => shuffleListings(demoBrowseListings), []);
   const productGroups = useMemo(() => groupListings(textListings.length ? textListings : shuffledDemoListings), [shuffledDemoListings, textListings]);
-  const photoHasResults = Boolean(photoStatus || photoListings.length > 0);
   const hasUploadedPhoto = Boolean(uploadedPhoto);
   const sortedPhotoListings = useMemo(() => sortListings(photoListings), [photoListings]);
-  const hasOverflowContent = activeMode === "browse" || photoHasResults || hasUploadedPhoto;
-  const photoMatchCount = isPhotoLoading ? "..." : sortedPhotoListings.length;
+  const hasOverflowContent = activeMode === "browse" || Boolean(photoStatus || photoListings.length > 0) || hasUploadedPhoto;
 
   useEffect(() => {
-    if (!selectedGroup) {
+    if (!selectedGroup && !isPhotoMatchesOpen) {
       return;
     }
 
@@ -72,7 +72,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
     return () => {
       document.body.style.overflow = originalOverflow;
     };
-  }, [selectedGroup]);
+  }, [selectedGroup, isPhotoMatchesOpen]);
 
   useEffect(() => {
     return () => {
@@ -103,6 +103,10 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
 
   function closeProductSheet() {
     setIsSheetClosing(true);
+  }
+
+  function closePhotoMatchesSheet() {
+    setIsPhotoMatchesClosing(true);
   }
 
   function shouldIgnoreSwipe(target: EventTarget) {
@@ -157,6 +161,8 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
     setIsPhotoLoading(true);
     setPhotoStatus("");
     setPhotoListings([]);
+    setIsPhotoMatchesOpen(false);
+    setIsPhotoMatchesClosing(false);
 
     const formData = new FormData();
     formData.append("image", file);
@@ -172,7 +178,12 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
         return;
       }
       setPhotoListings(data.listings ?? []);
-      setPhotoStatus(data.listings?.length ? "" : apiErrorMessage);
+      if (data.listings?.length) {
+        setPhotoStatus("");
+        setIsPhotoMatchesOpen(true);
+        return;
+      }
+      setPhotoStatus(apiErrorMessage);
     } catch {
       setPhotoStatus(apiErrorMessage);
     } finally {
@@ -290,24 +301,28 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                           <div className="absolute inset-0 bg-[linear-gradient(rgba(224,183,29,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(224,183,29,0.18)_1px,transparent_1px)] bg-[size:28px_28px] animate-[analysis-grid_1.8s_linear_infinite]" />
                           <div className="absolute inset-x-0 top-0 h-20 animate-[analysis-scan_1.6s_ease-in-out_infinite] bg-gradient-to-b from-transparent via-[#E0B71D]/35 to-transparent" />
                           <div className="absolute inset-0 bg-stone-950/10" />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/85 text-stone-950 backdrop-blur">
+                              <Loader2 aria-hidden="true" size={22} className="animate-spin" />
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
 
-                    <h1 className="text-[clamp(1.05rem,5vw,1.3rem)] font-black leading-tight text-stone-950">
-                      Marketplace <span className="text-[#E0B71D]">Matches</span> ({photoMatchCount})
-                    </h1>
+                    <label className="mx-auto inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-5 text-sm font-black text-white">
+                      <Upload aria-hidden="true" size={17} />
+                      Upload another
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        className="sr-only"
+                        onChange={(event) => handlePhotoUpload(event.target.files?.[0])}
+                      />
+                    </label>
 
-                    {(photoStatus || photoListings.length > 0) && (
-                      <section className="space-y-3 pb-8">
-                        {photoStatus && <ApiErrorBox onClose={() => setPhotoStatus("")} />}
-                        <div className="divide-y divide-stone-200 rounded-[8px] bg-white px-4 ring-1 ring-stone-200">
-                          {photoListings.slice(0, 8).map((listing) => (
-                            <CompactListing key={listing.id} listing={listing} />
-                          ))}
-                        </div>
-                      </section>
-                    )}
+                    {photoStatus && <ApiErrorBox onClose={() => setPhotoStatus("")} />}
                   </section>
                 ) : (
                   <div className="flex min-h-0 flex-1 flex-col items-center justify-center text-center">
@@ -403,6 +418,18 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
           }}
         />
       )}
+
+      {isPhotoMatchesOpen && (
+        <PhotoMatchesSheet
+          listings={sortedPhotoListings}
+          isClosing={isPhotoMatchesClosing}
+          onClose={closePhotoMatchesSheet}
+          onClosed={() => {
+            setIsPhotoMatchesOpen(false);
+            setIsPhotoMatchesClosing(false);
+          }}
+        />
+      )}
     </main>
   );
 }
@@ -421,6 +448,61 @@ function ApiErrorBox({ onClose }: { onClose: () => void }) {
           <X aria-hidden="true" size={17} />
         </button>
       </div>
+    </div>
+  );
+}
+
+function PhotoMatchesSheet({
+  listings,
+  isClosing,
+  onClose,
+  onClosed,
+}: {
+  listings: ProductListing[];
+  isClosing: boolean;
+  onClose: () => void;
+  onClosed: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center overscroll-none">
+      <button
+        type="button"
+        aria-label="Close marketplace matches"
+        onClick={onClose}
+        className={`absolute inset-0 bg-stone-950/60 backdrop-blur-[2px] ${
+          isClosing ? "animate-[backdrop-out_220ms_ease-out_forwards]" : "animate-[backdrop-in_180ms_ease-out]"
+        }`}
+      />
+      <section
+        onAnimationEnd={() => {
+          if (isClosing) {
+            onClosed();
+          }
+        }}
+        className={`scrollbar-hidden relative z-10 max-h-[72dvh] w-full max-w-2xl overflow-y-auto overscroll-contain rounded-t-[28px] bg-stone-50 px-4 pb-6 pt-3 ${
+          isClosing ? "animate-[sheet-down_220ms_ease-out_forwards]" : "animate-[sheet-up_220ms_ease-out]"
+        }`}
+      >
+        <div className="mx-auto mb-3 h-1.5 w-12 rounded-full bg-stone-300" />
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h2 className="text-[clamp(1.05rem,5vw,1.3rem)] font-black leading-tight text-stone-950">
+            Marketplace <span className="text-[#E0B71D]">Matches</span> ({listings.length})
+          </h2>
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={onClose}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-stone-950 shadow-sm ring-1 ring-stone-200"
+          >
+            <X aria-hidden="true" size={18} />
+          </button>
+        </div>
+        <div className="divide-y divide-stone-200 rounded-[8px] bg-white px-4 ring-1 ring-stone-200">
+          {listings.slice(0, 8).map((listing) => (
+            <CompactListing key={listing.id} listing={listing} />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
