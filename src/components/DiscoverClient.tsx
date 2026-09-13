@@ -22,6 +22,13 @@ type DiscoverClientProps = {
   initialMode?: DiscoverMode;
 };
 
+function shuffleListings(listings: ProductListing[]) {
+  return [...listings]
+    .map((listing) => ({ listing, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ listing }) => listing);
+}
+
 export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
   const [activeMode, setActiveMode] = useState<DiscoverMode>(initialMode);
   const [photoListings, setPhotoListings] = useState<ProductListing[]>([]);
@@ -34,7 +41,8 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
   const [selectedGroup, setSelectedGroup] = useState<ProductGroup | null>(null);
   const [isSheetClosing, setIsSheetClosing] = useState(false);
 
-  const productGroups = useMemo(() => groupListings(textListings.length ? textListings : demoBrowseListings), [textListings]);
+  const shuffledDemoListings = useMemo(() => shuffleListings(demoBrowseListings), []);
+  const productGroups = useMemo(() => groupListings(textListings.length ? textListings : shuffledDemoListings), [shuffledDemoListings, textListings]);
   const hasOverflowContent = photoStatus || photoListings.length > 0 || textStatus || productGroups.length > 0;
 
   useEffect(() => {
@@ -267,7 +275,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                   {textStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{textStatus}</p>}
                 </section>
 
-                <section className="columns-2 gap-3 pb-8 pt-6">
+                <section className="columns-2 gap-4 pb-8 pt-6">
                   {productGroups.map((group) => (
                     <ListingCard key={group.id} group={group} onSelect={openProductSheet} />
                   ))}
