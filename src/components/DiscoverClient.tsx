@@ -267,11 +267,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                   </div>
                   <form onSubmit={handleTextSearch} className="md:max-w-2xl">
                     <div className="relative flex-1">
-                      {isTextLoading ? (
-                        <Loader2 aria-hidden="true" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 animate-spin text-stone-400" />
-                      ) : (
-                        <Search aria-hidden="true" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
-                      )}
+                      <Search aria-hidden="true" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400" />
                       <input
                         value={query}
                         onChange={(event) => setQuery(event.target.value)}
@@ -280,6 +276,12 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                       />
                     </div>
                   </form>
+                  {isTextLoading && (
+                    <div className="mx-auto flex h-20 w-20 items-center justify-center overflow-hidden rounded-[18px] bg-white ring-1 ring-stone-200">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/loading-cart.gif" alt="" className="h-28 w-28 max-w-none object-cover object-center" />
+                    </div>
+                  )}
                   {textStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{textStatus}</p>}
                 </section>
 
