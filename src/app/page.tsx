@@ -32,7 +32,7 @@ export default function Home() {
         <div className="grid flex-1 content-center items-center gap-5 py-4 text-left md:grid-cols-[1fr_0.85fr] md:gap-14 md:py-8 lg:gap-20">
           <div className="flex max-w-xl flex-col items-start gap-5 md:gap-6">
             <h1 className="text-[2.5rem] font-black leading-[2.8rem] md:text-6xl md:leading-[4.35rem]">
-              Know the <span className="text-stone-700">right</span> price before you buy.
+              Know the <span className="text-[#E0B71D]">right</span> price before you buy.
             </h1>
             <p className="max-w-lg text-[15px] leading-6 text-stone-600 md:text-lg md:leading-8">
               Compare Indian marketplace prices in one clean mobile-first flow before you decide where to buy.
