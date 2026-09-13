@@ -1,5 +1,26 @@
 import { NextResponse } from "next/server";
+import { demoBrowseListings } from "@/lib/demo-listings";
 import { makeMarketplaceQuery, normalizeSerpApiSearchItem, sortListings } from "@/lib/search";
+
+const liveSearchTimeoutMs = 8000;
+
+function fallbackListings(query: string) {
+  const words = query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (words.length === 0) {
+    return [];
+  }
+
+  return sortListings(
+    demoBrowseListings.filter((listing) => {
+      const haystack = `${listing.title} ${listing.store} ${listing.domain} ${listing.availability ?? ""}`.toLowerCase();
+      return words.some((word) => haystack.includes(word));
+    }),
+  ).slice(0, 20);
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -24,7 +45,7 @@ export async function GET(request: Request) {
   url.searchParams.set("engine", "google");
   url.searchParams.set("api_key", apiKey);
   url.searchParams.set("q", makeMarketplaceQuery(query));
-  url.searchParams.set("num", "20");
+  url.searchParams.set("num", "10");
   url.searchParams.set("gl", "in");
   url.searchParams.set("hl", "en");
   url.searchParams.set("google_domain", "google.co.in");
@@ -33,16 +54,31 @@ export async function GET(request: Request) {
   let data: { error?: string; shopping_results?: Record<string, unknown>[]; organic_results?: Record<string, unknown>[] };
 
   try {
-    response = await fetch(url, {
+    const liveSearch = fetch(url, {
       cache: "no-store",
-      signal: AbortSignal.timeout(15000),
+      signal: AbortSignal.timeout(liveSearchTimeoutMs),
+    }).then(async (nextResponse) => ({
+      response: nextResponse,
+      data: (await nextResponse.json()) as typeof data,
+    }));
+    const timeout = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error("SerpApi search timed out.")), liveSearchTimeoutMs);
     });
-    data = await response.json();
+    const result = await Promise.race([liveSearch, timeout]);
+    response = result.response;
+    data = result.data;
   } catch {
-    return NextResponse.json(
-      { error: "Marketplace search timed out. Please try again." },
-      { status: 504 },
-    );
+    const listings = fallbackListings(query);
+
+    if (listings.length > 0) {
+      return NextResponse.json({
+        query,
+        listings,
+        hint: "Live marketplace search took too long, so showing matching preloaded listings.",
+      });
+    }
+
+    return NextResponse.json({ query, listings: [], hint: "Live marketplace search took too long. Try a more specific item name." });
   }
 
   if (!response.ok || data.error) {
@@ -61,5 +97,6 @@ export async function GET(request: Request) {
     .map((item, index) => normalizeSerpApiSearchItem(item, index))
     .filter((item) => item !== undefined);
 
-  return NextResponse.json({ query, listings: sortListings(listings) });
+  const sortedListings = sortListings(listings);
+  return NextResponse.json({ query, listings: sortedListings.length ? sortedListings : fallbackListings(query) });
 }
