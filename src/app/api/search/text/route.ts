@@ -207,6 +207,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ query, listings: strongFallback });
   }
 
+  let liveSearchIssue = "";
+
   try {
     const liveListings = await Promise.race([
       directShoppingListings(query, apiKey),
@@ -218,7 +220,9 @@ export async function GET(request: Request) {
     if (liveListings.length > 0) {
       return NextResponse.json({ query, listings: sortListings(liveListings).slice(0, 24) });
     }
-  } catch {
+    liveSearchIssue = "Live search returned no direct marketplace offers.";
+  } catch (error) {
+    liveSearchIssue = error instanceof Error ? error.message : "Live marketplace search failed.";
     // Fall through to preloaded fallback. Organic search is intentionally skipped because it often lacks images and direct product links.
   }
 
@@ -228,7 +232,7 @@ export async function GET(request: Request) {
     query,
     listings: fallback,
     hint: fallback.length
-      ? "Live marketplace search was slow, so showing matching preloaded listings."
-      : "No matching marketplace listings found. Try a more specific item name.",
+      ? "Live search is temporarily slow, so showing matching preloaded listings."
+      : `Live marketplace search is temporarily unavailable${liveSearchIssue ? `: ${liveSearchIssue}` : ""}. This may be an API limit or timeout, not a lack of listings. Please try again shortly.`,
   });
 }

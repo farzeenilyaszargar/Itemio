@@ -128,7 +128,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
       const nextListings = data.listings ?? [];
       setTextListings(nextListings);
       writeBrowseListingsCache(nextListings);
-      setTextStatus(data.listings?.length ? "" : "No marketplace listings found. Try a more specific item name.");
+      setTextStatus(nextListings.length ? (data.hint ?? "") : (data.hint ?? "Search is temporarily unavailable. Please try again in a little while."));
     } catch {
       setTextStatus("Search failed. Please try again on a stable connection.");
     } finally {
