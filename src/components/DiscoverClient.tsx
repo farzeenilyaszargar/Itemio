@@ -56,12 +56,8 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
   const photoHasResults = Boolean(photoStatus || photoListings.length > 0);
   const hasUploadedPhoto = Boolean(uploadedPhoto);
   const sortedPhotoListings = useMemo(() => sortListings(photoListings), [photoListings]);
-  const bestPhotoListing = sortedPhotoListings[0];
   const hasOverflowContent = activeMode === "browse" || photoHasResults || hasUploadedPhoto;
-  const uploadedPhotoSize = uploadedPhoto ? `${Math.max(uploadedPhoto.size / 1024, 1).toFixed(0)} KB` : "";
-  const uploadedPhotoType = uploadedPhoto?.type ? uploadedPhoto.type.replace("image/", "").toUpperCase() : "Image";
-  const uploadedPhotoName = uploadedPhoto?.name || "Uploaded photo";
-  const bestPhotoPrice = isPhotoLoading ? "Checking" : (bestPhotoListing?.price ?? "Not found");
+  const photoMatchCount = isPhotoLoading ? "..." : sortedPhotoListings.length;
 
   useEffect(() => {
     if (!selectedGroup) {
@@ -251,7 +247,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
             type="button"
             aria-pressed={activeMode === "photo"}
             onClick={() => setMode("photo")}
-            className={`relative z-10 flex h-11 items-center justify-center gap-2 rounded-full text-sm font-black transition-colors duration-300 ${
+            className={`relative z-10 flex h-11 min-w-0 items-center justify-center gap-1.5 rounded-full text-[clamp(0.75rem,3.3vw,0.875rem)] font-black transition-colors duration-300 ${
               activeMode === "photo" ? "text-white" : "text-stone-600"
             }`}
           >
@@ -262,7 +258,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
             type="button"
             aria-pressed={activeMode === "browse"}
             onClick={() => setMode("browse")}
-            className={`relative z-10 flex h-11 items-center justify-center gap-2 rounded-full text-sm font-black transition-colors duration-300 ${
+            className={`relative z-10 flex h-11 min-w-0 items-center justify-center gap-1.5 rounded-full text-[clamp(0.75rem,3.3vw,0.875rem)] font-black transition-colors duration-300 ${
               activeMode === "browse" ? "text-white" : "text-stone-600"
             }`}
           >
@@ -289,32 +285,14 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                       <img src={uploadedPhoto.url} alt="Uploaded item" className="block max-h-[48dvh] w-full object-contain" />
                     </div>
 
-                    <section className="space-y-3">
-                      <div>
-                        <h1 className="text-[1.45rem] font-black leading-8 text-stone-950">Photo details</h1>
-                        <p className="mt-1 line-clamp-1 text-xs font-semibold text-stone-500">{uploadedPhotoName}</p>
+                    <section className="flex flex-col gap-3">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <h1 className="text-[clamp(1.25rem,6vw,1.65rem)] font-black leading-tight text-stone-950">
+                          Marketplace <span className="text-[#E0B71D]">Matches ({photoMatchCount})</span>
+                        </h1>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="rounded-[8px] bg-white p-3 ring-1 ring-stone-200">
-                          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-stone-400">File</p>
-                          <p className="mt-1 text-sm font-black text-stone-950">{uploadedPhotoType}</p>
-                        </div>
-                        <div className="rounded-[8px] bg-white p-3 ring-1 ring-stone-200">
-                          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-stone-400">Size</p>
-                          <p className="mt-1 text-sm font-black text-stone-950">{uploadedPhotoSize}</p>
-                        </div>
-                        <div className="rounded-[8px] bg-white p-3 ring-1 ring-stone-200">
-                          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-stone-400">Matches</p>
-                          <p className="mt-1 text-sm font-black text-stone-950">{isPhotoLoading ? "Searching" : photoListings.length || "0"}</p>
-                        </div>
-                        <div className="rounded-[8px] bg-white p-3 ring-1 ring-stone-200">
-                          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-stone-400">Best price</p>
-                          <p className="mt-1 text-sm font-black text-stone-950">{bestPhotoPrice}</p>
-                        </div>
-                      </div>
-
-                      <label className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-5 text-sm font-black text-white">
+                      <label className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-5 text-sm font-black text-white min-[360px]:w-auto">
                         {isPhotoLoading ? <Loader2 aria-hidden="true" size={17} className="animate-spin" /> : <Upload aria-hidden="true" size={17} />}
                         {isPhotoLoading ? "Searching..." : "Change photo"}
                         <input
@@ -329,7 +307,6 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
 
                     {(photoStatus || photoListings.length > 0) && (
                       <section className="space-y-3 pb-8">
-                        <h2 className="text-lg font-black">Marketplace matches</h2>
                         {photoStatus && <p className="rounded-[8px] bg-amber-50 p-3 text-sm text-amber-900 ring-1 ring-amber-200">{photoStatus}</p>}
                         <div className="divide-y divide-stone-200 rounded-[8px] bg-white px-4 ring-1 ring-stone-200">
                           {photoListings.slice(0, 8).map((listing) => (
@@ -348,16 +325,16 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                           alt=""
                           width={1254}
                           height={1254}
-                          className="h-auto w-28 md:w-36"
+                          className="h-auto w-[clamp(5.5rem,28vw,8rem)] md:w-36"
                           priority
                         />
                         <div>
-                          <h1 className="text-[1.65rem] font-black leading-[2.05rem] text-stone-950 md:text-5xl md:leading-[3.65rem]">
+                          <h1 className="text-[clamp(1.45rem,8vw,1.65rem)] font-black leading-tight text-stone-950 md:text-5xl md:leading-[3.65rem]">
                             Check The <span className="text-[#E0B71D]">Right</span> Price
                           </h1>
                         </div>
                       </div>
-                      <label className="flex h-14 w-[min(100%,240px)] cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-black text-white shadow-sm">
+                      <label className="flex h-14 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-stone-950 px-4 text-sm font-black text-white shadow-sm min-[360px]:w-auto min-[360px]:px-8">
                         {isPhotoLoading ? <Loader2 aria-hidden="true" size={18} className="animate-spin" /> : <Upload aria-hidden="true" size={18} />}
                         {isPhotoLoading ? "Searching..." : "Choose photo"}
                         <input
