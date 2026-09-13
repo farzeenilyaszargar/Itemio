@@ -17,7 +17,7 @@ const productCanvases = [
   "bg-[#F0D6C8]",
 ];
 
-function getCanvasClass(id: string) {
+export function getProductCanvasClass(id: string) {
   const index = [...id].reduce((sum, char) => sum + char.charCodeAt(0), 0) % productCanvases.length;
   return productCanvases[index];
 }
@@ -25,7 +25,7 @@ function getCanvasClass(id: string) {
 export function ListingCard({ group, onSelect }: ListingCardProps) {
   const cheapest = group.listings[0];
   const storeCount = new Set(group.listings.map((listing) => listing.store)).size;
-  const canvasClass = getCanvasClass(group.id);
+  const canvasClass = getProductCanvasClass(group.id);
 
   return (
     <article className="mb-5 inline-block w-full break-inside-avoid">

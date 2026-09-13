@@ -4,7 +4,7 @@ import { FormEvent, PointerEvent, TouchEvent, useEffect, useMemo, useRef, useSta
 import Image from "next/image";
 import Link from "next/link";
 import { Camera, ExternalLink, IndianRupee, Loader2, Search, Upload, User, X } from "lucide-react";
-import { CompactListing, ListingCard } from "@/components/ListingCard";
+import { CompactListing, getProductCanvasClass, ListingCard } from "@/components/ListingCard";
 import { MobileOnlyNotice } from "@/components/MobileOnlyNotice";
 import { readBrowseListingsCache, writeBrowseListingsCache } from "@/lib/browse-cache";
 import { demoBrowseListings } from "@/lib/demo-listings";
@@ -438,6 +438,7 @@ function ProductDetailSheet({
 }) {
   const listings = sortListings(group.listings);
   const cheapest = listings[0];
+  const canvasClass = getProductCanvasClass(group.id);
   const [sheetDragY, setSheetDragY] = useState(0);
   const [isSheetDragging, setIsSheetDragging] = useState(false);
   const sheetDragStart = useRef<{ y: number; pointerId: number } | null>(null);
@@ -527,12 +528,13 @@ function ProductDetailSheet({
         </div>
 
         <div className="mt-5 grid gap-5 md:grid-cols-[0.85fr_1.15fr]">
-          <div className="overflow-hidden rounded-[8px] bg-stone-100">
+          <div className={`relative flex items-center justify-center overflow-hidden rounded-[22px] ${canvasClass}`}>
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_35%_20%,rgba(255,255,255,0.55),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.22),rgba(255,255,255,0))]" />
             {group.image ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={group.image} alt="" className="block max-h-[58dvh] w-full object-contain" />
+              <img src={group.image} alt="" className="relative block max-h-[58dvh] w-full object-contain mix-blend-multiply" />
             ) : (
-              <div className="flex aspect-[4/5] items-center justify-center text-stone-400">
+              <div className="relative flex aspect-[4/5] items-center justify-center text-stone-500">
                 <Camera aria-hidden="true" size={36} />
               </div>
             )}
