@@ -187,7 +187,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
         <header className="hidden items-center justify-between md:flex">
           <Link href="/" className="flex h-11 items-center gap-1.5">
             <Image
-              src="/kitne-rupay-logo.png"
+              src="/kitne-rupay-logo.webp"
               alt=""
               width={40}
               height={40}
@@ -249,7 +249,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                   <section className="flex w-full max-w-2xl flex-col items-center gap-5 px-1 py-1 md:px-0 md:py-8">
                     <div className="flex flex-col items-center gap-3 md:gap-4">
                       <Image
-                        src="/photo-camera-icon.png"
+                        src="/photo-camera-icon.webp"
                         alt=""
                         width={1254}
                         height={1254}
@@ -294,7 +294,7 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                 <section className="relative space-y-5 px-1 py-1 md:px-0 md:py-8">
                   <div className="flex items-center gap-3">
                     <Image
-                      src="/browse-cart-icon.png"
+                      src="/browse-cart-icon.webp"
                       alt=""
                       width={1254}
                       height={1254}

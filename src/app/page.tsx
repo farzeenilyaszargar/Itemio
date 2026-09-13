@@ -11,7 +11,7 @@ export default function Home() {
         <nav className="hidden items-center justify-between md:flex">
           <div className="flex h-11 items-center gap-1.5">
             <Image
-              src="/kitne-rupay-logo.png"
+              src="/kitne-rupay-logo.webp"
               alt=""
               width={40}
               height={40}
@@ -49,7 +49,7 @@ export default function Home() {
 
           <div className="flex w-full justify-center md:justify-end md:pt-0">
             <Image
-              src="/hero-shopping-bags.png"
+              src="/hero-shopping-bags.webp"
               alt="Yellow and black shopping bags with a price tag"
               width={512}
               height={512}

@@ -50,7 +50,7 @@ export function ItemClient({ slug, query }: ItemClientProps) {
         <header className="hidden items-center justify-between md:flex">
           <Link href="/" className="flex h-11 items-center gap-1.5">
             <Image
-              src="/kitne-rupay-logo.png"
+              src="/kitne-rupay-logo.webp"
               alt=""
               width={40}
               height={40}
