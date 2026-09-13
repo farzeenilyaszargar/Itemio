@@ -201,11 +201,11 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
                   <section className="flex w-full max-w-2xl flex-col items-center gap-5 px-1 py-1 md:px-0 md:py-8">
                     <div className="flex flex-col items-center gap-3 md:gap-4">
                       <Image
-                        src="/photo-camera-icon.jpeg"
+                        src="/photo-camera-icon.png"
                         alt=""
-                        width={736}
-                        height={736}
-                        className="h-auto w-28 opacity-45 mix-blend-multiply grayscale brightness-125 contrast-50 md:w-36"
+                        width={1254}
+                        height={1254}
+                        className="h-auto w-28 md:w-36"
                         priority
                       />
                       <div>
