@@ -6,7 +6,7 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://itemio.vercel.app";
 const siteTitle = "Itemio | Find Item Prices & Compare Prices of Items";
 const siteDescription =
   "Find item prices and compare prices of items across Indian marketplaces with Itemio. Search by product photo or item name before you buy.";
-const socialImage = "/og-image.png";
+const socialImage = "/itemio-social-preview.png";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -79,6 +79,7 @@ export const metadata: Metadata = {
         url: socialImage,
         width: 1200,
         height: 630,
+        type: "image/png",
         alt: "Itemio price comparison preview",
       },
     ],
@@ -87,7 +88,12 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    images: [socialImage],
+    images: [
+      {
+        url: socialImage,
+        alt: "Itemio price comparison preview",
+      },
+    ],
   },
 };
 
