@@ -409,16 +409,18 @@ export function DiscoverClient({ initialMode = "photo" }: DiscoverClientProps) {
 
 function ApiErrorBox({ onClose }: { onClose: () => void }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-[14px] bg-stone-950 px-4 py-3 text-white">
-      <p className="text-sm font-black leading-5">{apiErrorMessage}</p>
-      <button
-        type="button"
-        aria-label="Close error"
-        onClick={onClose}
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition active:scale-95"
-      >
-        <X aria-hidden="true" size={16} />
-      </button>
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-stone-950/45 px-5 backdrop-blur-[1px]">
+      <div className="flex w-full max-w-sm items-center justify-between gap-3 rounded-[20px] bg-stone-950 px-4 py-4 text-white">
+        <p className="text-sm font-black leading-5">{apiErrorMessage}</p>
+        <button
+          type="button"
+          aria-label="Close error"
+          onClick={onClose}
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition active:scale-95"
+        >
+          <X aria-hidden="true" size={17} />
+        </button>
+      </div>
     </div>
   );
 }
